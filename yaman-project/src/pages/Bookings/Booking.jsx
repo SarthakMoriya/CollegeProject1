@@ -4,9 +4,10 @@ import { useSelector } from "react-redux";
 import Footer from "../../components/Footer";
 const Booking = () => {
   const [bookings, setBookings] = useState([]);
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state?.auth?.user);
+  console.log(user);
   const fetchBookings = async () => {
-    await fetch(`${BASE_URL}/bookings/${user?._id}`).then(async (res) => {
+    await fetch(`${BASE_URL}/bookings/${user[0]?._id}`).then(async (res) => {
       if (res.ok) {
         let data = await res.json();
         setBookings(data);
@@ -22,7 +23,7 @@ const Booking = () => {
       headers: { "Content-Type": "application/json" },
     }).then(async (res) => {
       console.log(res.ok);
-      let newBookings = bookings.filter((booking) => booking._id !== tour._id);
+      let newBookings = bookings.filter((booking) => booking?._id !== tour?._id);
       setBookings(newBookings);
     });
   };
@@ -47,31 +48,31 @@ const Booking = () => {
               return (
                 <div
                   className="border-2 flex gap-4 items-center justify-between my-2 bg-slate-400 text-white"
-                  key={booking._id}
+                  key={booking?._id}
                 >
                   <div className="flex flex-col items-start justify-end gap-2 mx-4 my-2">
-                    <div className="font-bold">Booking ID : {booking._id}</div>
-                    <div className="font-bold">User ID : {booking.userId}</div>
-                    <div className="font-bold">Tour ID : {booking.tourId}</div>
+                    <div className="font-bold">Booking ID : {booking?._id}</div>
+                    <div className="font-bold">User ID : {booking?.userId}</div>
+                    <div className="font-bold">Tour ID : {booking?.tourId}</div>
                   </div>
-                  <div className="">Group Size: {booking.groupSize}</div>
-                  <div className="">Status: {booking.status}</div>
-                  <button
-                    className="border rounded-lg p-3 mx-4 bg-blue-600"
-                    onClick={() => {
-                      handleDeleteBooking(booking);
-                    }}
-                  >
-                    Cancel Booking
-                  </button>
+                  <div className="">Group Size: {booking?.groupSize}</div>
+                  <div className="mx-4">Status: {booking?.status}</div>
+                  {booking?.status != "approved" && (
+                    <button
+                      className="border rounded-lg p-3 mx-4 bg-blue-600"
+                      onClick={() => {
+                        handleDeleteBooking(booking);
+                      }}
+                    >
+                      Cancel Booking
+                    </button>
+                  )}
                 </div>
               );
             })}
         </div>
       </div>
-      <div className="absolute bottom-0 w-screen">
-      <Footer />
-      </div>
+      
     </>
   );
 };

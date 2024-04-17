@@ -82,14 +82,9 @@ export async function updateBooking(req, res) {
       return res.status(404).send("Booking not found");
     }
     console.log(booking);
-    const updatedBooking = await Booking.findByIdAndUpdate(
-      bookingId,
-      req.body,
-      {
-        new: true,
-      }
-    );
-    console.log(updatedBooking);
+    booking.status =req.body.status;
+    await booking.save();
+    console.log(booking)
     res.send("Booking updated successfully");
   } catch (error) {
     res.status(500).send("Error updating booking");
