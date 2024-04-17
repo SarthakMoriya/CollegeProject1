@@ -72,7 +72,7 @@ const Booking = () => {
             })}
         </div>
       </div>
-      
+      <Footer/>
     </>
   );
 };

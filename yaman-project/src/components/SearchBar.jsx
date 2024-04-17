@@ -1,9 +1,10 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 const SearchBar = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     location: "amritsar",
-    checkin: "",
+    price: 1000,
     groupsize: 2,
   });
   const handleChange = (e) => {
@@ -11,11 +12,15 @@ const SearchBar = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    navigate(`/tours?location=${formData.location}&groupsize=${formData.groupsize}&price=${formData.price}`)
     console.log(formData);
   };
   return (
     <div className="flex items-center justify-center w-screen ">
-      <form className="w-3/4  flex items-center justify-center p-3 gap-4" onSubmit={handleSubmit} >
+      <form
+        className="w-3/4  flex items-center justify-center p-3 gap-4"
+        onSubmit={handleSubmit}
+      >
         <input
           type="text"
           name="location"
@@ -25,10 +30,10 @@ const SearchBar = () => {
           className="p-3 rounded-lg "
         />
         <input
-          type="date"
-          name="checkin"
-          value={formData.checkin}
-          placeholder="checkin date"
+          type="number"
+          name="price"
+          value={formData.price}
+          placeholder="price"
           onChange={handleChange}
           className="p-3 rounded-lg "
         />
@@ -40,7 +45,9 @@ const SearchBar = () => {
           onChange={handleChange}
           className="p-3 rounded-lg "
         />
-        <button className="p-2 border border-slate-700 rounded-lg hover:rounded-none hover:bg-slate-500 hover:text-white ease-in duration-500 ">Search</button>
+        <button className="p-2 border border-slate-700 rounded-lg hover:rounded-none hover:bg-slate-500 hover:text-white ease-in duration-500 ">
+          Search
+        </button>
       </form>
     </div>
   );

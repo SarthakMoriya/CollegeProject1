@@ -9,16 +9,23 @@ import "slick-carousel/slick/slick-theme.css";
 import p1 from "../../assets/trendingDest/amritsar.jpg";
 import BookingModal from "../../components/BookingModal";
 import { setBooking } from "../../state";
+import HeadingWrapper from "../../components/HeadingWrapper";
+import BookingCard from "../../components/BookingCard";
+import Footer from "../../components/Footer";
+import { useNavigate } from "react-router-dom";
+
 const Tours = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tours, setTours] = useState([]);
+  const [searchTours, setSearchTours] = useState([]);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [ratedTours, setRatedTours] = useState([]);
   const [priceTours, setPriceTours] = useState([]);
   const [formData, setFormData] = useState({
     location: "amritsar",
-    checkin: "",
+    price: 1000,
     groupsize: 2,
   });
   const handleChange = (e) => {
@@ -27,14 +34,20 @@ const Tours = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
+    navigate(
+      `/tours?location=${formData.location}&groupsize=${formData.groupsize}&price=${formData.price}`
+    );
+    filterBookingFromURL();
   };
   const fetchTours = async () => {
     const res = await fetch(`${BASE_URL}/gettours`);
     const data = await res.json();
     if (res.ok) {
+      console.log(data);
       setTours(data);
       setRatedTours(data.filter((tour) => tour.ratingAverage > 3));
       setPriceTours(data.sort((a, b) => a.price - b.price));
+      return data;
     } else {
       setError("NO TOURS AVAILABLE");
     }
@@ -43,8 +56,28 @@ const Tours = () => {
     setShowModal(true);
     dispatch(setBooking(tour));
   };
+  const filterBookingFromURL = async () => {
+    const queryParams = new URLSearchParams(window.location.search);
+    let location = queryParams.get("location");
+    let price = queryParams.get("price");
+    let groupsize = queryParams.get("groupsize");
+    console.log(location, groupsize, price);
+    let allTours = await fetchTours();
+    let filteredTours = await allTours.filter((tour) => {
+      if (
+        tour.location == location &&
+        tour.maxGroupSize == groupsize &&
+        tour.price >= price
+      ) {
+        return tour;
+      }
+    });
+    console.log(filteredTours)
+    setSearchTours(filteredTours);
+  };
   useEffect(() => {
     fetchTours();
+    filterBookingFromURL();
   }, []);
   const settings = {
     dots: true,
@@ -56,126 +89,122 @@ const Tours = () => {
     autoplaySpeed: 2000,
   };
   return (
-    <div>
-      {/* SEARCH BAR */}
-      <div className="">
-        <div>
-          <form className="" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="location"
-              placeholder="location"
-              onChange={handleChange}
-              value={formData.location}
-            />
-            <input
-              type="date"
-              name="checkin"
-              value={formData.checkin}
-              placeholder="checkin date"
-              onChange={handleChange}
-            />
-            <input
-              type="text"
-              name="groupsize"
-              value={formData.groupsize}
-              placeholder="group size"
-              onChange={handleChange}
-            />
-            <button>submit</button>
-          </form>
+    <>
+      <div className=" mb-8">
+        {/* SEARCH BAR */}
+        <div className="">
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <div className="flex w-screen items-center justify-center">
+            <form
+              className="w-3/4  flex items-center justify-center p-3 gap-4"
+              onSubmit={handleSubmit}
+            >
+              <input
+                type="text"
+                name="location"
+                placeholder="location"
+                onChange={handleChange}
+                value={formData.location}
+                className="p-3 rounded-lg"
+              />
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                placeholder="price"
+                onChange={handleChange}
+                className="p-3 rounded-lg"
+              />
+              <input
+                type="text"
+                name="groupsize"
+                value={formData.groupsize}
+                placeholder="group size"
+                onChange={handleChange}
+                className="p-3 rounded-lg"
+              />
+              <button className="p-3 border bg-blue-500 border-slate-700 rounded-lg hover:rounded-none hover:bg-slate-500 hover:text-white ease-in duration-500 ">
+                Search
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
-      {/* ALL TOURS */}
-      <div className="">
-        <div className="">Discover Tours</div>
-      </div>
-      <div className="slider-container">
-        <Slider {...settings}>
-          {tours.slice(0, 10).map((tour) => (
-            <div key={tour._id} className="border-2 rounded-lg shadow-sm">
-              <img src={p1} alt="" className="rounded-lg border-2" />
-              <div className="">{tour.location}</div>
-              <div className="">${tour.price}</div>
-              <div className="">{tour.maxGroupSize}</div>
-              <div className="">{tour.ratingAverage}</div>
-              <div className="">{tour.startDate.slice(0, 10)}</div>
-              <button
-                data-modal-target="crud-modal"
-                data-modal-toggle="crud-modal"
-                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button"
-                onClick={() => {
-                  handleBooking(tour);
-                }}
-              >
-                Book Tour
-              </button>
+        {/* SEARCHED TOURS */}
+        {searchTours.length && (
+          <>
+            <HeadingWrapper heading={"Search Results"} />
+            <div className="slider-container">
+              <Slider {...settings}>
+                {tours.slice(0, 10).map((tour) => (
+                  <BookingCard
+                    key={tour?._id}
+                    tour={tour}
+                    handleBooking={handleBooking}
+                  />
+                ))}
+              </Slider>
             </div>
-          ))}
-        </Slider>
-      </div>
-      {/* RATED TOURS */}
-      <div className="">
-        <div className="">Highly Rated Tours</div>
-      </div>
-      <div className="slider-container">
-        <Slider {...settings}>
-          {ratedTours?.slice(0, 10)?.map((tour) => (
-            <div key={tour._id} className="border-2 rounded-lg shadow-sm">
-              <img src={p1} alt="" className="rounded-lg border-2" />
-              <div className="">{tour.location}</div>
-              <div className="">${tour.price}</div>
-              <div className="">{tour.maxGroupSize}</div>
-              <div className="">{tour.ratingAverage}</div>
-              <div className="">{tour.startDate.slice(0, 10)}</div>
-              <button
-                data-modal-target="crud-modal"
-                data-modal-toggle="crud-modal"
-                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button"
-                onClick={() => {
-                  handleBooking(tour);
-                }}
-              >
-                Book Tour
-              </button>
-            </div>
-          ))}
-        </Slider>
-      </div>
+          </>
+        )}
+        {/* ALL TOURS */}
+        <br />
+        <br />
+        <HeadingWrapper heading={"Discover Tours"} />
+        <br />
+        <div className="slider-container">
+          <Slider {...settings}>
+            {tours.slice(0, 10).map((tour) => (
+              <BookingCard
+                key={tour?._id}
+                tour={tour}
+                handleBooking={handleBooking}
+              />
+            ))}
+          </Slider>
+        </div>
+        {/* RATED TOURS */}
+        <br />
+        <br />
+        <br />
+        <HeadingWrapper heading={"Highly Rated Tours"} />
+        <br />
+        <div className="slider-container">
+          <Slider {...settings}>
+            {ratedTours?.slice(0, 10)?.map((tour) => (
+              <BookingCard
+                key={tour?._id}
+                tour={tour}
+                handleBooking={handleBooking}
+              />
+            ))}
+          </Slider>
+        </div>
 
-      {/* PRICE RATED TOURS */}
-      <div className="">
-        <div className="">PRICE Rated Tours</div>
+        {/* PRICE RATED TOURS */}
+        <br />
+        <br />
+        <br />
+        <HeadingWrapper heading={"Budget Tours"} />
+        <br />
+        <div className="slider-container">
+          <Slider {...settings}>
+            {priceTours?.slice(0, 10)?.map((tour) => (
+              <BookingCard
+                key={tour?._id}
+                tour={tour}
+                handleBooking={handleBooking}
+              />
+            ))}
+          </Slider>
+        </div>
+        {showModal && <BookingModal setShowModal={setShowModal} />}
       </div>
-      <div className="slider-container">
-        <Slider {...settings}>
-          {priceTours?.slice(0, 10)?.map((tour) => (
-            <div key={tour._id} className="border-2 rounded-lg shadow-sm">
-              <img src={p1} alt="" className="rounded-lg border-2" />
-              <div className="">{tour.location}</div>
-              <div className="">${tour.price}</div>
-              <div className="">{tour.maxGroupSize}</div>
-              <div className="">{tour.ratingAverage}</div>
-              <div className="">{tour.startDate.slice(0, 10)}</div>
-              <button
-                data-modal-target="crud-modal"
-                data-modal-toggle="crud-modal"
-                className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button"
-                onClick={() => {
-                  handleBooking(tour);
-                }}
-              >
-                Book Tour
-              </button>
-            </div>
-          ))}
-        </Slider>
-      </div>
-      {showModal && <BookingModal  setShowModal={setShowModal} />}
-    </div>
+      <Footer />
+    </>
   );
 };
 
