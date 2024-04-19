@@ -2,7 +2,15 @@ import { useEffect, useState } from "react";
 import { BASE_URL } from "../../../utils";
 import { useSelector } from "react-redux";
 import Footer from "../../components/Footer";
+import BookingIcon from "../../icons/BookingIcon";
+import UserIdIcon from "../../icons/UserIdIcon";
+import TourIdIcon from "../../icons/TourIdIcon";
+import GroupSize from "../../icons/GroupSize";
+import StatusIcon from "../../icons/StatusIcon";
+import { useNavigate } from "react-router-dom";
+import HeadingWrapper from "../../components/HeadingWrapper";
 const Booking = () => {
+  const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const user = useSelector((state) => state?.auth?.user);
   console.log(user);
@@ -10,6 +18,7 @@ const Booking = () => {
     await fetch(`${BASE_URL}/bookings/${user[0]?._id}`).then(async (res) => {
       if (res.ok) {
         let data = await res.json();
+        console.log(data);
         setBookings(data);
       } else {
         alert("Couldn't fetch bookings");
@@ -23,9 +32,14 @@ const Booking = () => {
       headers: { "Content-Type": "application/json" },
     }).then(async (res) => {
       console.log(res.ok);
-      let newBookings = bookings.filter((booking) => booking?._id !== tour?._id);
+      let newBookings = bookings.filter(
+        (booking) => booking?._id !== tour?._id
+      );
       setBookings(newBookings);
     });
+  };
+  const handlePlanner = (id) => {
+    navigate(`/guidedetails/${id}`);
   };
   useEffect(() => {
     fetchBookings();
@@ -37,12 +51,7 @@ const Booking = () => {
           <br />
           <br />
           <br /> <br />
-          <div className="flex items-center justify-center my-4">
-            <div className="border-b-4 text-lg text-slate-700 font-bold">
-              {" "}
-              YOUR BOOKINGS
-            </div>
-          </div>
+          <HeadingWrapper heading={"YOUR BOOKINGS"} />
           {bookings.length &&
             bookings.map((booking) => {
               return (
@@ -51,12 +60,32 @@ const Booking = () => {
                   key={booking?._id}
                 >
                   <div className="flex flex-col items-start justify-end gap-2 mx-4 my-2">
-                    <div className="font-bold">Booking ID : {booking?._id}</div>
-                    <div className="font-bold">User ID : {booking?.userId}</div>
-                    <div className="font-bold">Tour ID : {booking?.tourId}</div>
+                    <div className="font-bold flex items-center justify-center gap-2">
+                      <BookingIcon />
+                      <div className="">Booking ID : {booking?._id}</div>
+                    </div>
+                    <div className="font-bold flex items-center justify-center gap-2">
+                      <UserIdIcon />
+                      <div
+                        className=""
+                        onClick={() => handlePlanner(booking.plannerId)}
+                      >
+                        Planner ID : {booking?.plannerId}
+                      </div>
+                    </div>
+                    <div className="font-bold flex items-center justify-center gap-2">
+                      <TourIdIcon />
+                      <div className="">Tour ID : {booking?.tourId}</div>
+                    </div>
                   </div>
-                  <div className="">Group Size: {booking?.groupSize}</div>
-                  <div className="mx-4">Status: {booking?.status}</div>
+                  <div className="flex items-center justify-center gap-2">
+                    <GroupSize />
+                    <div className="">{booking?.groupSize}</div>
+                  </div>
+                  <div className="mx-4 flex items-center justify-center gap-2">
+                    <StatusIcon />
+                    <div className="">{booking?.status}</div>
+                  </div>
                   {booking?.status != "approved" && (
                     <button
                       className="border rounded-lg p-3 mx-4 bg-blue-600"
@@ -72,7 +101,7 @@ const Booking = () => {
             })}
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

@@ -45,7 +45,8 @@ const SearchBar = () => {
           onChange={handleChange}
           className="p-3 rounded-lg "
         />
-        <button className="p-2 border border-slate-700 rounded-lg hover:rounded-none hover:bg-slate-500 hover:text-white ease-in duration-500 ">
+        <button 
+        className="p-2 border border-slate-700 rounded-lg hover:rounded-none hover:bg-slate-500 text-white ease-in duration-500  bg-blue-500">
           Search
         </button>
       </form>

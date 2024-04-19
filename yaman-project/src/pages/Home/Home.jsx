@@ -2,27 +2,25 @@ import Footer from "../../components/Footer";
 import SearchBar from "../../components/SearchBar";
 import Todo from "./Todo";
 import TrendingDest from "./TrendingDest";
+import HeadingWrapper from "../../components/HeadingWrapper";
 
 const Home = () => {
   return (
-    <div className=" w-full mx-auto absolute bg-slate-100">
+    <div className=" w-full mx-auto absolute bg-gray-900">
       <br />
       <br />
       <br />
       <br />
       <SearchBar />
       <br />
-      <div className=" flex flex-col items-center justify-start mx-6 my-6">
-        <h3 className="font-bold text-2xl text-blue-600 border-b-4 border-slate-600">Destinations in India</h3>
-      </div>
+      <HeadingWrapper heading={"Destinations in India"} />
       <Todo />
-      <br /><br />
-      <div className=" flex flex-col items-center justify-start mx-6 my-6">
-        <h3 className="font-bold text-2xl text-blue-600 border-b-4 border-slate-600">Popular Destinations</h3>
-      </div>
+      <br />
+      <br />
+    <HeadingWrapper heading={"Popular Destinations"}/>
       <TrendingDest />
       <br />
-      <Footer/>
+      <Footer />
     </div>
   );
 };

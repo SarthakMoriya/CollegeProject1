@@ -8,8 +8,10 @@ import CreateTour from "./pages/CreateTour";
 import Tours from "./pages/Tours/Tours";
 import Booking from "./pages/Bookings/Booking";
 import MyTours from "./pages/MyTours/MyTours";
-import { useSelector } from "react-redux";
 import MyBookings from "./pages/MyBookings/MyBookings";
+import Guide from "./pages/Guide/Guide";
+import Razorpay from "./components/RazorPay";
+import EditTour from "./pages/EditTour.jsx/EditTour";
 
 const App = () => {
   return (
@@ -26,6 +28,10 @@ const App = () => {
           <Route path="/tours" element={<Tours />} />
           <Route path="/mytours" element={<MyTours />} />
           <Route path="/mybookings" element={<MyBookings />} />
+          <Route path="/guidedetails/:id" element={<Guide />} />
+          <Route path="/pay" element={<Razorpay />} />
+          <Route path="/edit/:id" element={<EditTour />} />
+          
         </Routes>
       </div>
     </BrowserRouter>

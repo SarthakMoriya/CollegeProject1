@@ -26,11 +26,8 @@ export async function getAllUsers(req, res) {
   res.send(usermodel);
 }
 export async function getUserById(req, res) {
-  const useriModelid = req.params;
-  console.log(usermodelid);
-  const usermodel = await usermodel.findById(useriModelid.id);
-  console.log(usermodel);
-  res.send("hello");
+  const user = await usermodel.findById(req.params.id);
+  res.send(user);
 }
 export async function deleteUserById(req, res) {
   const usermodelid = req.params;

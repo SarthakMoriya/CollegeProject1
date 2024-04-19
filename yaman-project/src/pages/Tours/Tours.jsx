@@ -66,13 +66,13 @@ const Tours = () => {
     let filteredTours = await allTours.filter((tour) => {
       if (
         tour.location == location &&
-        tour.maxGroupSize == groupsize &&
+        tour.maxGroupSize >= groupsize &&
         tour.price >= price
       ) {
         return tour;
       }
     });
-    console.log(filteredTours)
+    console.log(filteredTours);
     setSearchTours(filteredTours);
   };
   useEffect(() => {
@@ -149,6 +149,12 @@ const Tours = () => {
               </Slider>
             </div>
           </>
+        )}
+        {searchTours.length == 0 && (
+          <div className="flex items-center justify-center w-screen text-2xl font-bold text-blue-400 mt-10">
+            {" "}
+            No Tours Found...
+          </div>
         )}
         {/* ALL TOURS */}
         <br />

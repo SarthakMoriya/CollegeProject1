@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
+import p1 from "../assets/todo/goa.jpg";
+import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../../utils";
 const BookingModal = ({ setShowModal, tour }) => {
   const user = useSelector((state) => state.auth.user);
-  console.log(user)
+  console.log(user);
   const booking = useSelector((state) => state.booking);
   console.log(booking.booking);
   const [formData, setFormData] = useState({
@@ -16,21 +18,97 @@ const BookingModal = ({ setShowModal, tour }) => {
     groupSize: 1,
     userId: user[0]?._id,
     tourId: booking?.booking?._id,
-    plannerId:booking?.booking?.guides[0]
+    plannerId: booking?.booking?.guides[0],
   });
   const handleForm = (e) => {
     setFormData({ ...formData, [e?.target?.id]: e?.target?.value });
   };
   const handleBooking = async (e) => {
     e.preventDefault();
+    let totalPrice = formData.groupSize * formData.price;
     await fetch(`${BASE_URL}/booking`, {
       method: "POST",
-      body: JSON.stringify(formData),
+      body: JSON.stringify({...formData,price: totalPrice}),
       headers: { "Content-Type": "application/json" },
-    }).then(async(res) => {
+    }).then(async (res) => {
       console.log(await res.json());
+      displayRazorpay(formData.price);
+      setShowModal(false)
     });
   };
+  function loadScript(src) {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  }
+
+  async function displayRazorpay(price) {
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+
+    if (!res) {
+      alert("Razorpay SDK failed to load. Are you online?");
+      return;
+    }
+
+    const result = await axios.post("http://localhost:8000/orders", {
+      headers: { "Content-Type": "application/json" },
+      data: { price: formData.price*formData.groupSize },
+    });
+
+    if (!result) {
+      alert("Server error. Are you online?");
+      return;
+    }
+
+    const { amount, id: order_id, currency } = result.data;
+    console.log(amount);
+    const options = {
+      key: "rzp_test_zlCqIoqxiB2Mim", // Enter the Key ID generated from the Dashboard
+      amount: amount.toString(),
+      currency: currency,
+      name: "Soumya Corp.",
+      description: "Test Transaction",
+      image: { p1 },
+      order_id: order_id,
+      handler: async function (response) {
+        console.log(response);
+        const data = {
+          orderCreationId: order_id,
+          razorpayPaymentId: response.razorpay_payment_id,
+          razorpayOrderId: response.razorpay_order_id,
+          razorpaySignature: response.razorpay_signature,
+        };
+
+        const result = await axios.post("http://localhost:8000/success", data);
+
+        alert(result.data.msg);
+      },
+      prefill: {
+        name: "Soumya Dey",
+        email: "SoumyaDey@example.com",
+        contact: "8544875229",
+      },
+      notes: {
+        address: "Soumya Dey Corporate Office",
+      },
+      theme: {
+        color: "#61dafb",
+      },
+    };
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  }
   return (
     <div>
       <div
@@ -160,7 +238,7 @@ const BookingModal = ({ setShowModal, tour }) => {
                   <input
                     type="number"
                     name="price"
-                    id="gs"
+                    id="groupSize"
                     value={formData?.groupSize}
                     onChange={handleForm}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
