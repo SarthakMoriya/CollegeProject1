@@ -43,7 +43,7 @@ export async function login(req, res) {
     // CHECK IF USER EXISTS ITH THE EMAI PROVIDED
     let existingUser = await usermodel.find({ email: credentails.email });
     if (!existingUser) return res.status(401).send("INVALID EMAIL");
-
+    console.log(existingUser)
     // IF THE USER EXISTIS WITH EMAIL PROVIDED MATCH THE PASSWORD
     let correctPassword = await bcrypt.compare(
       credentails.password,
@@ -54,7 +54,7 @@ export async function login(req, res) {
     // IF PASSWORD IS ALSO CORRECT GENERATE TOKEN
     let token = jwt.sign(credentails.email, "heheheheheheeh");
     console.log(existingUser)
-    res.status(200).json({ token, user: existingUser });
+    res.status(200).json({ token, user: existingUser[0] });
   } catch (error) {
     res.status(500).json({ message: "ERROR", error });
   }

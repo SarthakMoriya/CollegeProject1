@@ -49,4 +49,4 @@ const BookingCard = ({ tour, handleBooking }) => {
   );
 };
 
-export default PlannerTOur;
+export default BookingCard;

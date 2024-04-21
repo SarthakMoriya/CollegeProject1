@@ -5,6 +5,7 @@ import { data } from "../sampleData.js";
 export async function createTour(req, res) {
   try {
     const tour = req.body;
+    
     const newTour = await Tour.create(tour);
     res.status(200).json({ message: "Tour Created Successfully!" });
   } catch (error) {

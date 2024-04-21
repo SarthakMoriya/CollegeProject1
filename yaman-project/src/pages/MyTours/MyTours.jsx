@@ -17,7 +17,7 @@ const MyTours = () => {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
   const fetchMyTours = async () => {
-    await fetch(`${BASE_URL}/mytours/${user[0]._id}`).then(async (res) => {
+    await fetch(`${BASE_URL}/mytours/${user._id}`).then(async (res) => {
       if (res.ok) {
         let data = await res.json();
         console.log(data);
@@ -60,7 +60,7 @@ const MyTours = () => {
                 key={tour?._id}
                 className="border-2 rounded-lg shadow-sm mx-2 w-1/3 h-1/3"
               >
-                <img src={p1} alt="" className="rounded-lg " />
+                <img src={tour?.imageUrl} alt="" className="rounded-lg " />
                 <div className="flex items-center justify-center gap-4 text-white mt-4 mb-2">
                   <TitleIcon/>
                   <div className="capitalize">{tour?.title}</div>

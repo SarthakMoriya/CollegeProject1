@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { BASE_URL } from "../../../utils";
+import { BASE_URL, toastify } from "../../../utils";
 import { useSelector } from "react-redux";
 import Footer from "../../components/Footer";
 import { useParams } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 const EditTour = () => {
   const user = useSelector((state) => state.auth.user);
   const params = useParams();
-    const [tour, setTour] = useState(null)
+  const [tour, setTour] = useState(null);
   const [formData, setFormData] = useState({
-    _id:"",
+    _id: "",
     title: "",
     desc: "",
     price: "",
@@ -20,19 +21,25 @@ const EditTour = () => {
     difficulty: "",
     ratingAverage: "12",
     ratingsQuantity: "12",
-    guides: user[0]._id,
+    guides: user._id,
     age: "",
   });
   const fetchTour = async () => {
-    await fetch(`${BASE_URL}/gettour/${params.id}`).then(async (res) => {
-      if (res.ok) {
-        let data = await res.json();
-        setTour(data);
-        setFormData(data);
-        console.log(data)
-      }
-    });
+    await fetch(`${BASE_URL}/gettour/${params.id}`)
+      .then(async (res) => {
+        if (res.ok) {
+          let data = await res.json();
+          if (res.ok) {
+            setTour(data);
+            setFormData(data);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({
@@ -47,16 +54,23 @@ const EditTour = () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
-    }).then((res) => {
-      console.log(res);
-    });
-    console.log(formData);
+    })
+      .then((res) => {
+        if (res.ok) {
+          toastify("Tour updated successfully 🎊");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toastify("Error updating tour 💣", true);
+      });
   };
   useEffect(() => {
     fetchTour();
   }, []);
   return (
     <>
+      <ToastContainer />
       <section className="bg-white dark:bg-gray-900 border-b-2 border-blue-700">
         <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
           <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
@@ -131,7 +145,6 @@ const EditTour = () => {
                 <select
                   id="age"
                   name="age"
-
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   value={formData.age}
                   onChange={handleChange}

@@ -15,7 +15,7 @@ const MyBookings = () => {
   const [status, setStatus] = useState("");
   console.log(user);
   const fetchUserBooking = async () => {
-    await fetch(`${BASE_URL}/plannerbookings/${user[0]._id}`).then(
+    await fetch(`${BASE_URL}/plannerbookings/${user._id}`).then(
       async (res) => {
         if (res.ok) {
           let data = await res.json();

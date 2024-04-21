@@ -1,10 +1,25 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
-import { BASE_URL } from "../../utils";
+import { BASE_URL, toastify } from "../../../utils";
 import { useSelector } from "react-redux";
-import Footer from "../components/Footer";
+import Footer from "../../components/Footer";
+import { app } from "../../firebase";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { v4 } from "uuid";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
 const CreateTour = () => {
-  const user =useSelector(state=>state.auth.user)
-  console.log(user)
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
+  const [image, setImage] = useState(null);
+  const [showUploadedImage, setShowUploadedImage] = useState("");
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     desc: "",
@@ -17,8 +32,9 @@ const CreateTour = () => {
     difficulty: "",
     ratingAverage: "12",
     ratingsQuantity: "12",
-    guides: user[0]._id,
+    guides: user._id,
     age: "",
+    imageUrl: "",
   });
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -35,12 +51,47 @@ const CreateTour = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     }).then((res) => {
+      if (res.ok) {
+        toastify("Tour created successfully ✨✨");
+        setTimeout(() => {
+          navigate("/mytours");
+        }, 4000);
+      }
       console.log(res);
     });
     console.log(formData);
   };
+
+  const handleFileUpload = async () => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + image.name; // So no two users have same file
+    const storageRef = ref(storage, fileName); //location+filename
+    const uploadTask = uploadBytesResumable(storageRef, image); //finalStep
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
+      (err) => {
+        console.log(true);
+        setIsImageUploaded(false);
+        toastify("Error uploading image", true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+          setIsImageUploaded(true);
+          console.log(downloadUrl);
+          setFormData({ ...formData, imageUrl: downloadUrl });
+          setShowUploadedImage(downloadUrl);
+          toastify("Image uploaded successfully ");
+        });
+      }
+    );
+  };
   return (
     <>
+      <ToastContainer />
       <section className="bg-white dark:bg-gray-900 border-b-2 border-blue-700">
         <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
           <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
@@ -48,6 +99,30 @@ const CreateTour = () => {
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+              <div className="">
+                {isImageUploaded && <img src={showUploadedImage} />}
+                <input
+                  type="file"
+                  className="p-3 rounded-lg border-none bg-transparent text-white text-lg my-4"
+                  onChange={(e) => {
+                    setImage(e.target.files[0]);
+                  }}
+                />
+
+                {isImageUploaded ? (
+                  <div className="cursor-not-allowed w-full border-4 border-dotted border-blue-400 p-3 text-white font-semibold text-xl">
+                    Image Uploaded
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className=" w-full border-4 border-dotted border-blue-400 p-3 text-white font-semibold text-xl"
+                    onClick={handleFileUpload}
+                  >
+                    Upload
+                  </button>
+                )}
+              </div>
               <div className="sm:col-span-2">
                 <label
                   htmlFor="name"
@@ -73,6 +148,7 @@ const CreateTour = () => {
                 >
                   Location
                 </label>
+
                 <input
                   type="text"
                   name="location"
@@ -243,7 +319,7 @@ const CreateTour = () => {
             </button>
           </form>
         </div>
-      </section >
+      </section>
       <Footer />
     </>
   );

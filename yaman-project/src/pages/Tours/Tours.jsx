@@ -20,7 +20,7 @@ const Tours = () => {
   const [tours, setTours] = useState([]);
   const [searchTours, setSearchTours] = useState([]);
   const [error, setError] = useState("");
-  const [showModal, setShowModal] = useState(false);
+
   const [ratedTours, setRatedTours] = useState([]);
   const [priceTours, setPriceTours] = useState([]);
   const [formData, setFormData] = useState({
@@ -51,10 +51,6 @@ const Tours = () => {
     } else {
       setError("NO TOURS AVAILABLE");
     }
-  };
-  const handleBooking = (tour) => {
-    setShowModal(true);
-    dispatch(setBooking(tour));
   };
   const filterBookingFromURL = async () => {
     const queryParams = new URLSearchParams(window.location.search);
@@ -143,7 +139,7 @@ const Tours = () => {
                   <BookingCard
                     key={tour?._id}
                     tour={tour}
-                    handleBooking={handleBooking}
+                    
                   />
                 ))}
               </Slider>
@@ -167,7 +163,7 @@ const Tours = () => {
               <BookingCard
                 key={tour?._id}
                 tour={tour}
-                handleBooking={handleBooking}
+               
               />
             ))}
           </Slider>
@@ -184,7 +180,7 @@ const Tours = () => {
               <BookingCard
                 key={tour?._id}
                 tour={tour}
-                handleBooking={handleBooking}
+                
               />
             ))}
           </Slider>
@@ -202,12 +198,11 @@ const Tours = () => {
               <BookingCard
                 key={tour?._id}
                 tour={tour}
-                handleBooking={handleBooking}
+               
               />
             ))}
           </Slider>
         </div>
-        {showModal && <BookingModal setShowModal={setShowModal} />}
       </div>
       <Footer />
     </>

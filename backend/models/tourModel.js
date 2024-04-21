@@ -50,9 +50,14 @@ const tourSchema = mongoose.Schema(
     guides: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
+        ref: "user",
       },
     ],
+    imageUrl: {
+      type: String,
+      default:
+        "https://firebasestorage.googleapis.com/v0/b/yamanproject-4e8ba.appspot.com/o/1713700911175Flexi%20(1).png?alt=media&token=3c679253-9f80-42d7-831d-61adaf6d7830",
+    },
   },
   { timestamps: true }
 );

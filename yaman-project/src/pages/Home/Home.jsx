@@ -17,6 +17,8 @@ const Home = () => {
       <Todo />
       <br />
       <br />
+      <br />
+      <br />
     <HeadingWrapper heading={"Popular Destinations"}/>
       <TrendingDest />
       <br />

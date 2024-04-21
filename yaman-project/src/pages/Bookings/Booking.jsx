@@ -15,7 +15,7 @@ const Booking = () => {
   const user = useSelector((state) => state?.auth?.user);
   console.log(user);
   const fetchBookings = async () => {
-    await fetch(`${BASE_URL}/bookings/${user[0]?._id}`).then(async (res) => {
+    await fetch(`${BASE_URL}/bookings/${user?._id}`).then(async (res) => {
       if (res.ok) {
         let data = await res.json();
         console.log(data);

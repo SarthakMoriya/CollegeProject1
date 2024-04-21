@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../utils";
-import { setLogin } from "../state";
-import Footer from "../components/Footer";
+import { BASE_URL, toastify } from "../../../utils";
+import { setLogin } from "../../state";
+import Footer from "../../components/Footer";
+import { ToastContainer } from "react-toastify";
 const Signup = () => {
   // const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,32 +17,41 @@ const Signup = () => {
   const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setloading(true);
-    await fetch(`${BASE_URL}/signup`, {
-      method: "POST",
-      body: JSON.stringify({ email, password, phoneno: phone,role }),
-      headers: { "Content-Type": "application/json" },
-    })
-      .then(async (res) => {
-        let data = await res.json();
-        console.log(data);
-        if (res.ok) {
-          dispatch(setLogin({ ...data }));
-          navigate("/");
-        } else {
-          alert("Signup failed");
-        }
-        setloading(false);
-        setEmail("");
-        setPassword("");
+    if (password == "" || email == "" || phone == " ") {
+      toastify("Please enter all required fields", true);
+    } else {
+      setloading(true);
+      await fetch(`${BASE_URL}/signup`, {
+        method: "POST",
+        body: JSON.stringify({ email, password, phoneno: phone, role }),
+        headers: { "Content-Type": "application/json" },
       })
-      .catch((err) => {
-        console.log(err);
-        setloading(false);
-      });
+        .then(async (res) => {
+          console.log(res.ok);
+          let data = await res.json();
+          if (res.ok) {
+            toastify("Signup successful");
+            setTimeout(() => {
+              dispatch(setLogin({ ...data }));
+              navigate("/");
+              setloading(false);
+              setEmail("");
+              setPassword("");
+            }, 3000);
+          } else {
+            toastify("Email and phone number must be unique", true);
+            setloading(false);
+          }
+        })
+        .catch((err) => {
+          toastify(`Signup failed -- ${err.message}`, true);
+          setloading(false);
+        });
+    }
   };
   return (
     <>
+      <ToastContainer />
       <div className="w-full flex items-center justify-center h-screen">
         {loading && (
           <div className="absolute top-0 left-0 h-screen w-screen bg-black text-blue-800  opacity-50 flex items-center justify-center">
@@ -56,27 +66,9 @@ const Signup = () => {
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="username"
-              >
-                Username
-              </label>
-              {/* <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              placeholder="Username"
-            /> */}
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="password"
               >
-                Email
+                Email*
               </label>
               <input
                 className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -94,7 +86,7 @@ const Signup = () => {
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="password"
               >
-                Password
+                Password*
               </label>
               <input
                 className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -112,7 +104,7 @@ const Signup = () => {
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="password"
               >
-                Phone Number
+                Phone Number*
               </label>
               <input
                 className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -124,7 +116,7 @@ const Signup = () => {
                 onChange={(e) => {
                   setPhone(e.target.value);
                 }}
-                placeholder="******************"
+                placeholder="+91 1234567890"
               />
             </div>
             <div className="mb-6">

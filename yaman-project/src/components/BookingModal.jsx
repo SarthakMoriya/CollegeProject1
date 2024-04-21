@@ -5,35 +5,47 @@ import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../../utils";
+import { motion } from "framer-motion";
+
 const BookingModal = ({ setShowModal, tour }) => {
   const user = useSelector((state) => state.auth.user);
   console.log(user);
   const booking = useSelector((state) => state.booking);
   console.log(booking.booking);
   const [formData, setFormData] = useState({
-    phoneno: user[0]?.phoneno,
-    email: user[0]?.email,
+    phoneno: user?.phoneno,
+    email: user?.email,
     price: booking?.booking?.price,
-    name: user[0]?.email?.split("@")[0],
+    name: user?.email?.split("@")[0],
     groupSize: 1,
-    userId: user[0]?._id,
+    userId: user?._id,
     tourId: booking?.booking?._id,
     plannerId: booking?.booking?.guides[0],
   });
   const handleForm = (e) => {
-    setFormData({ ...formData, [e?.target?.id]: e?.target?.value });
+    if (
+      e.target.id == "groupSize" &&
+      e.target.value > booking.booking.maxGroupSize
+    ) {
+      setFormData({
+        ...formData,
+        [e?.target?.id]: booking.booking.maxGroupSize,
+      });
+    } else {
+      setFormData({ ...formData, [e?.target?.id]: e?.target?.value });
+    }
   };
   const handleBooking = async (e) => {
     e.preventDefault();
     let totalPrice = formData.groupSize * formData.price;
     await fetch(`${BASE_URL}/booking`, {
       method: "POST",
-      body: JSON.stringify({...formData,price: totalPrice}),
+      body: JSON.stringify({ ...formData, price: totalPrice }),
       headers: { "Content-Type": "application/json" },
     }).then(async (res) => {
       console.log(await res.json());
       displayRazorpay(formData.price);
-      setShowModal(false)
+      setShowModal(false);
     });
   };
   function loadScript(src) {
@@ -62,7 +74,7 @@ const BookingModal = ({ setShowModal, tour }) => {
 
     const result = await axios.post("http://localhost:8000/orders", {
       headers: { "Content-Type": "application/json" },
-      data: { price: formData.price*formData.groupSize },
+      data: { price: formData.price * formData.groupSize },
     });
 
     if (!result) {
@@ -110,12 +122,14 @@ const BookingModal = ({ setShowModal, tour }) => {
     paymentObject.open();
   }
   return (
-    <div>
-      <div
+    <motion.div className="flex">
+      <motion.div
+        whileInView={{ opacity: [0, 1] }}
+        transition={{ duration: 1, ease: "easeInOut" }}
         id="crud-modal"
         tabIndex="-1"
         aria-hidden="true"
-        className=" overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+        className="flex  overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
       >
         <div className="relative p-4 w-full max-w-md max-h-full">
           <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -220,10 +234,10 @@ const BookingModal = ({ setShowModal, tour }) => {
                     type="number"
                     name="price"
                     id="price"
+                    disabled={true}
                     defaultValue={booking?.booking?.price}
                     value={formData.price}
-                    onChange={handleForm}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className="cursor-not-allowed bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="$2999"
                     required=""
                   />
@@ -239,6 +253,8 @@ const BookingModal = ({ setShowModal, tour }) => {
                     type="number"
                     name="price"
                     id="groupSize"
+                    max={booking.booking.maxGroupSize}
+                    min={1}
                     value={formData?.groupSize}
                     onChange={handleForm}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -268,8 +284,8 @@ const BookingModal = ({ setShowModal, tour }) => {
             </form>
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { BASE_URL } from "../../utils";
-import { setLogin } from "../state";
-import Footer from "../components/Footer";
+import { BASE_URL, toastify } from "../../../utils";
+import { setLogin } from "../../state";
+import Footer from "../../components/Footer";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,13 +24,16 @@ const Login = () => {
     })
       .then(async (res) => {
         let data = await res.json();
-        console.log(data.user[0].role);
+        console.log(data)
+        console.log(data.user.role);
         if (res?.ok) {
-          dispatch(setLogin({ ...data }));
-          if (data.user[0].role == "user") navigate("/");
-          else if (data.user[0].role == "planner") navigate("/mytours");
-        } else {
-          alert("LOGIN FAILED...");
+          toastify("Redirecting to Home page! 😊");
+          setTimeout(() => {
+            dispatch(setLogin({ ...data }));
+            if (data.user.role == "user") {
+              navigate("/");
+            } else if (data.user.role == "planner") navigate("/mytours");
+          }, 4000);
         }
 
         setloading(false);
@@ -38,10 +43,13 @@ const Login = () => {
       .catch((err) => {
         console.log(err);
         setloading(false);
+        toastify("Invalid Credentials", true);
       });
   };
+
   return (
     <>
+      <ToastContainer />
       <div className="w-full flex items-center justify-center h-[70vh]">
         {loading && (
           <div className="absolute top-0 left-0 h-screen w-screen bg-black text-blue-800  opacity-50 flex items-center justify-center">

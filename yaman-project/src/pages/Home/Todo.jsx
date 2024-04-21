@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import p1 from "../../assets/todo/andaman.jpg";
 import p2 from "../../assets/todo/kerela.jpg";
@@ -20,7 +21,9 @@ const Todo = () => {
   return (
     <div className="flex flex-wrap items-center justify-center gap-2">
       {cities.map((c, ind) => (
-        <div
+        <motion.div
+          whileInView={{ opacity: [0, 1] }}
+          transition={{ duration: 2, ease: "easeInOut" }}
           key={c}
           className="w-[15%] bg-white"
           onClick={() => {
@@ -35,7 +38,7 @@ const Todo = () => {
               <div className="font-bold text-xl mb-2">{c}</div>
             </div>
           </div>
-        </div>
+        </motion.div>
       ))}
     </div>
   );
