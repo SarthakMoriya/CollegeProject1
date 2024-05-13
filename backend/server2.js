@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from 'cors'
 import Razorpay from 'razorpay'
 import crypto from 'crypto'
+import 'dotenv/config'
 
 import { deleteUserById, getAllUsers, getUserById, login, signup } from "./controllers/userController.js";
 import { createTour, deleteTour, getTour, getTours, getToursOfPlanner, updateTour,getPlannerDetails } from "./controllers/tourController.js";
@@ -16,9 +17,8 @@ app.use(cors())
 
 app.use('/auth',adminRouter)
 
-// 0JgrcbxnXccNtdvC
 // DATABASE CONNECTION
-mongoose.connect("mongodb+srv://sarthak:0JgrcbxnXccNtdvC@cluster0.dkryym7.mongodb.net/");
+mongoose.connect(process.env.MONGODB_URL)
 
 app.listen(8000, function () {
     console.log("Server Started At 8000");
