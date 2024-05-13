@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { BASE_URL, toastify } from "../../../utils";
 import { setLogin } from "../../state";
 import Footer from "../../components/Footer";
+import { motion } from "framer-motion";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +26,7 @@ const Login = () => {
     })
       .then(async (res) => {
         let data = await res.json();
-        console.log(data)
+        console.log(data);
         console.log(data.user.role);
         if (res?.ok) {
           toastify("Redirecting to Home page! 😊");
@@ -56,7 +58,11 @@ const Login = () => {
             <span className="text-blue-600 opacity-90 z-10">Loading</span>
           </div>
         )}
-        <div className="w-full max-w-xs">
+        <motion.div
+          whileInView={{ opacity: [0, 1] }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+          className="w-full max-w-xs"
+        >
           <form
             className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-blue-400 border-2 "
             onSubmit={handleSubmit}
@@ -66,7 +72,7 @@ const Login = () => {
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="email"
               >
-                Username
+                Username*
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -84,7 +90,7 @@ const Login = () => {
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="password"
               >
-                Password
+                Password*
               </label>
               <input
                 className="shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
@@ -115,7 +121,7 @@ const Login = () => {
           <p className="text-center text-gray-500 text-xs">
             &copy;2024 xyz Corp. All rights reserved.
           </p>
-        </div>
+        </motion.div>
       </div>
       <Footer />
     </>

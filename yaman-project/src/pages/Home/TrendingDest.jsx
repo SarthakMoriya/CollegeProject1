@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import p1 from "../../assets/trendingDest/amritsar.jpg";
+import p1 from "../../assets/trendingDest/amritsar.jpeg";
 import p5 from "../../assets/trendingDest/bangalore.jpg";
 import p4 from "../../assets/trendingDest/chennai.jpg";
 import p3 from "../../assets/trendingDest/delhi.jpg";
@@ -48,11 +48,9 @@ const TrendingDest = () => {
       </div>
       <br />
 
-      <motion.div
-        className=" flex items-center justify-center gap-4"
-      >
+      <motion.div className=" flex items-center justify-center gap-4">
         <motion.div
-          whileInView={{ y: [100,0,50,0,25,0,12.5,0,6,0] }}
+          whileInView={{ y: [100, 0, 50, 0, 25, 0, 12.5, 0, 6, 0] }}
           transition={{ duration: 2, ease: "easeInOut" }}
           className="flex items-center justify-center w-1/2 h-1/3 relative"
         >
@@ -66,7 +64,7 @@ const TrendingDest = () => {
           />
         </motion.div>
         <motion.div
-          whileInView={{ y: [100,0,50,0,25,0,12.5,0,6,0] }}
+          whileInView={{ y: [100, 0, 50, 0, 25, 0, 12.5, 0, 6, 0] }}
           transition={{ duration: 2, ease: "easeInOut" }}
           className="flex items-center justify-center w-1/2 h-1/3 relative"
         >
@@ -80,7 +78,7 @@ const TrendingDest = () => {
           />
         </motion.div>
         <motion.div
-          whileInView={{ y: [100,0,50,0,25,0,12.5,0,6,0] }}
+          whileInView={{ y: [100, 0, 50, 0, 25, 0, 12.5, 0, 6, 0] }}
           transition={{ duration: 2, ease: "easeInOut" }}
           className="flex items-center justify-center w-1/2 h-1/3 relative"
         >

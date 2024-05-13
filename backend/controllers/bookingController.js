@@ -1,5 +1,6 @@
 import Booking from "../models/bookingModel.js";
 import Tour from "../models/tourModel.js";
+import usermodel from "../models/userModel.js";
 
 export async function createBooking(req, res) {
   try {
@@ -7,7 +8,9 @@ export async function createBooking(req, res) {
     console.log(req.body);
     const newBooking = await Booking.create(bookingData);
     console.log(newBooking);
-    res.status(200).json({ message: "Booking Created Successfully!" });
+    const planner=await usermodel.findById(req.body.plannerId);
+
+    res.status(200).json({ message: "Booking Created Successfully!",planner });
   } catch (error) {
     res.status(500).json(error);
   }

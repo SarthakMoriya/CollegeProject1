@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
-import { BASE_URL, toastify } from "../../../utils";
+import { BASE_URL, formatDate, toastify } from "../../../utils";
 import { useSelector } from "react-redux";
 import Footer from "../../components/Footer";
 import { app } from "../../firebase";
@@ -10,15 +10,21 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { v4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 const CreateTour = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
+  const [destination, setDestination] = useState({
+    destimg: "",
+    desctdate: new Date(),
+    desctdesc: "",
+    descttitle: "",
+  });
   const [image, setImage] = useState(null);
   const [showUploadedImage, setShowUploadedImage] = useState("");
+  const [addDest, setAddDest] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -35,6 +41,7 @@ const CreateTour = () => {
     guides: user._id,
     age: "",
     imageUrl: "",
+    destinations: [],
   });
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -62,6 +69,31 @@ const CreateTour = () => {
     console.log(formData);
   };
 
+  const handleDestinationImage = async () => {
+    console.log("HII");
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + destination.destimg.name; // So no two users have same file
+    const storageRef = ref(storage, fileName); //location+filename
+    const uploadTask = uploadBytesResumable(storageRef, destination.destimg); //finalStep
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
+      (err) => {
+        console.log(true);
+        toastify("Error uploading image", true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+          setDestination({ ...destination, destimg: downloadUrl });
+          console.log(downloadUrl);
+          toastify("Image uploaded successfully ");
+        });
+      }
+    );
+  };
   const handleFileUpload = async () => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + image.name; // So no two users have same file
@@ -88,6 +120,41 @@ const CreateTour = () => {
         });
       }
     );
+  };
+
+  const handleDestinationForm = (e) => {
+    console.log(e.target.name, e.target.value, e.target.type);
+    if (e.target.type === "file") {
+      setDestination((prev) => ({
+        ...prev,
+        [e.target.name]: e.target.files[0],
+      }));
+    } else {
+      setDestination((prev) => ({
+        ...prev,
+        [e.target.name]: e.target.value,
+      }));
+    }
+  };
+
+  const handleDestination = () => {
+    console.log(destination);
+    setFormData((prevState) => ({
+      ...prevState,
+      destinations: [
+        {
+          ...destination,
+        },
+        ...prevState.destinations,
+      ],
+    }));
+    setDestination({
+      destimg: "",
+      desctdate: new Date(),
+      desctdesc: "",
+      descttitle: "",
+    });
+    console.log(formData);
   };
   return (
     <>
@@ -292,7 +359,6 @@ const CreateTour = () => {
                   required=""
                 />
               </div>
-
               <div className="sm:col-span-2">
                 <label
                   htmlFor="description"
@@ -310,7 +376,110 @@ const CreateTour = () => {
                   placeholder="Your description here"
                 ></textarea>
               </div>
+
+              {/* DESTINATION FORM */}
+              {addDest && (
+                <div className="">
+                  <div>
+                    <label
+                      htmlFor="destimg"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Destination Image
+                    </label>
+                    <input
+                      type="file"
+                      name="destimg"
+                      id="destimg"
+                      onChange={(e) => {
+                        handleDestinationForm(e);
+                      }}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      placeholder="12"
+                      required=""
+                    />
+                    <div
+                      className=""
+                      onClick={() => {
+                        handleDestinationImage();
+                      }}
+                    >
+                      ADD IMAGE
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="descttitle"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Destination Title
+                    </label>
+                    <input
+                      type="text"
+                      name="descttitle"
+                      id="descttitle"
+                      value={destination.descttitle}
+                      onChange={(e) => {
+                        handleDestinationForm(e);
+                      }}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      placeholder="12"
+                      required=""
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="descdate"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Destination Date
+                    </label>
+                    <input
+                      type="date"
+                      name="desctdate"
+                      id="desctdate"
+                      value={destination.desctdate}
+                      onChange={(e) => {
+                        handleDestinationForm(e);
+                      }}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      placeholder="12"
+                      required=""
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="desctdesc"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Destination Description
+                    </label>
+                    <input
+                      type="test"
+                      name="desctdesc"
+                      id="desctdesc"
+                      value={destination.desctdesc}
+                      onChange={(e) => {
+                        handleDestinationForm(e);
+                      }}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      placeholder="12"
+                      required=""
+                    />
+                  </div>
+                  <div className="" onClick={handleDestination}>
+                    Save
+                  </div>
+                </div>
+              )}
             </div>
+            <button
+              type="button"
+              onClick={() => setAddDest(!addDest)}
+              className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800"
+            >
+              Add Destinations
+            </button>
             <button
               type="submit"
               className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800"

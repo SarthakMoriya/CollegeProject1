@@ -5,6 +5,7 @@ import { BASE_URL, toastify } from "../../../utils";
 import { setLogin } from "../../state";
 import Footer from "../../components/Footer";
 import { ToastContainer } from "react-toastify";
+import { motion } from "framer-motion";
 const Signup = () => {
   // const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,7 +59,11 @@ const Signup = () => {
             <span className="text-blue-600 opacity-90 z-10">Loading</span>
           </div>
         )}
-        <div className="w-full max-w-xs">
+        <motion.div
+          whileInView={{ opacity: [0, 1] }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+          className="w-full max-w-xs"
+        >
           <form
             className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-blue-400 border-2 "
             onSubmit={handleSubmit}
@@ -155,7 +160,7 @@ const Signup = () => {
           <p className="text-center text-gray-500 text-xs">
             &copy;2024 xyz Corp. All rights reserved.
           </p>
-        </div>
+        </motion.div>
       </div>
       <Footer />
     </>

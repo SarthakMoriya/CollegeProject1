@@ -40,3 +40,15 @@
 .read-the-docs {
   color: #888;
 }
+
+.image-container {
+  width: 300px; /* Adjust the width to your desired fixed width */
+  height: 200px; /* Adjust the height to your desired fixed height */
+  overflow: hidden; /* This property ensures that any part of the image exceeding the container size is hidden */
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This property ensures the image fills the container without distorting its aspect ratio */
+}

@@ -8,6 +8,14 @@ const EditTour = () => {
   const user = useSelector((state) => state.auth.user);
   const params = useParams();
   const [tour, setTour] = useState(null);
+  const [destinations, setDestinations] = useState([
+    {
+      destimg: "",
+      desctdate: new Date(),
+      desctdesc: "",
+      descttitle: "",
+    },
+  ]);
   const [formData, setFormData] = useState({
     _id: "",
     title: "",
@@ -23,6 +31,7 @@ const EditTour = () => {
     ratingsQuantity: "12",
     guides: user._id,
     age: "",
+    destinations: "",
   });
   const fetchTour = async () => {
     await fetch(`${BASE_URL}/gettour/${params.id}`)
@@ -32,6 +41,7 @@ const EditTour = () => {
           if (res.ok) {
             setTour(data);
             setFormData(data);
+            setDestinations(data?.destinations);
           }
         }
       })
@@ -40,6 +50,20 @@ const EditTour = () => {
       });
   };
 
+  const handleDestinationForm = (e, i) => {
+    console.log(e.target.id, e.target.value);
+    let oldDestinations = destinations;
+    oldDestinations[i] = {
+      ...oldDestinations[i],
+      [e.target.id]: e.target.value,
+    };
+    setDestinations(oldDestinations);
+    console.log(destinations);
+  };
+
+  const handleDestinationsFinal = () => {
+    setFormData((prev) => ({ ...prev, destinations: destinations }));
+  };
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({
@@ -268,6 +292,82 @@ const EditTour = () => {
                 ></textarea>
               </div>
             </div>
+            <br />
+            {destinations &&
+              destinations?.map((dest, i) => (
+                <div key={i}>
+                  <br />
+                  <div className="">
+                    <div>
+                      <label
+                        htmlFor="descttitle"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Destination Title {i + 1}
+                      </label>
+                      <input
+                        type="text"
+                        name="descttitle"
+                        id="descttitle"
+                        defaultValue={dest.descttitle}
+                        onChange={(e) => {
+                          handleDestinationForm(e, i);
+                        }}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        placeholder="12"
+                        required=""
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="descdate"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Destination Date
+                      </label>
+                      <input
+                        type="date"
+                        name="desctdate"
+                        id="desctdate"
+                        defaultValue={dest.desctdate}
+                        onChange={(e) => {
+                          handleDestinationForm(e, i);
+                        }}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        placeholder="12"
+                        required=""
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="desctdesc"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >
+                        Destination Description
+                      </label>
+                      <input
+                        type="test"
+                        name="desctdesc"
+                        id="desctdesc"
+                        defaultValue={dest.desctdesc}
+                        onChange={(e) => {
+                          handleDestinationForm(e, i);
+                        }}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        placeholder="12"
+                        required=""
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            <button
+              className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800"
+              onClick={handleDestinationsFinal}
+            >
+              Save Destinations Data
+            </button>
+              <br />
             <button
               type="submit"
               className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800"

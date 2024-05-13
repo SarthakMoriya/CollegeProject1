@@ -6,7 +6,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import p1 from "../../assets/trendingDest/amritsar.jpg";
+import p1 from "../../assets/trendingDest/amritsar.jpeg";
 import BookingModal from "../../components/BookingModal";
 import { setBooking } from "../../state";
 import HeadingWrapper from "../../components/HeadingWrapper";
@@ -42,8 +42,8 @@ const Tours = () => {
   const fetchTours = async () => {
     const res = await fetch(`${BASE_URL}/gettours`);
     const data = await res.json();
+    console.log(data)
     if (res.ok) {
-      console.log(data);
       setTours(data);
       setRatedTours(data.filter((tour) => tour.ratingAverage > 3));
       setPriceTours(data.sort((a, b) => a.price - b.price));
@@ -57,7 +57,6 @@ const Tours = () => {
     let location = queryParams.get("location");
     let price = queryParams.get("price");
     let groupsize = queryParams.get("groupsize");
-    console.log(location, groupsize, price);
     let allTours = await fetchTours();
     let filteredTours = await allTours.filter((tour) => {
       if (
@@ -81,8 +80,8 @@ const Tours = () => {
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 3,
-    autoplay: true,
-    autoplaySpeed: 2000,
+    // autoplay: true,
+    // autoplaySpeed: 2000,
   };
   return (
     <>
@@ -136,11 +135,7 @@ const Tours = () => {
             <div className="slider-container">
               <Slider {...settings}>
                 {tours.slice(0, 10).map((tour) => (
-                  <BookingCard
-                    key={tour?._id}
-                    tour={tour}
-                    
-                  />
+                  <BookingCard key={tour?._id} tour={tour} />
                 ))}
               </Slider>
             </div>
@@ -160,11 +155,7 @@ const Tours = () => {
         <div className="slider-container">
           <Slider {...settings}>
             {tours.slice(0, 10).map((tour) => (
-              <BookingCard
-                key={tour?._id}
-                tour={tour}
-               
-              />
+              <BookingCard key={tour?._id} tour={tour} />
             ))}
           </Slider>
         </div>
@@ -177,11 +168,7 @@ const Tours = () => {
         <div className="slider-container">
           <Slider {...settings}>
             {ratedTours?.slice(0, 10)?.map((tour) => (
-              <BookingCard
-                key={tour?._id}
-                tour={tour}
-                
-              />
+              <BookingCard key={tour?._id} tour={tour} />
             ))}
           </Slider>
         </div>
@@ -195,11 +182,7 @@ const Tours = () => {
         <div className="slider-container">
           <Slider {...settings}>
             {priceTours?.slice(0, 10)?.map((tour) => (
-              <BookingCard
-                key={tour?._id}
-                tour={tour}
-               
-              />
+              <BookingCard key={tour?._id} tour={tour} />
             ))}
           </Slider>
         </div>

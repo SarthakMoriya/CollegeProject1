@@ -1,11 +1,12 @@
 import Tour from "../models/tourModel.js";
+import User from "../models/userModel.js";
 import mongoose from "mongoose";
 import { data } from "../sampleData.js";
 
 export async function createTour(req, res) {
   try {
     const tour = req.body;
-    
+
     const newTour = await Tour.create(tour);
     res.status(200).json({ message: "Tour Created Successfully!" });
   } catch (error) {
@@ -34,12 +35,14 @@ export async function getToursOfPlanner(req, res) {
 export async function getTour(req, res) {
   try {
     const tourId = req.params.id;
-    console.log(tourId);
     const tour = await Tour.findById(tourId);
     if (!tour) {
       return res.status(404).send("Tour not found");
     }
-    res.send(tour);
+    if (tour) {
+      let guide = await User.findById(tour.guides[0]);
+      res.send({tour,guide});
+    }
   } catch (error) {
     res.status(500).send("Error fetching tour");
   }
@@ -87,7 +90,7 @@ export const getPlannerDetails = async (req, res) => {
   try {
     console.log(req.params.id);
     let tours = await Tour.find();
-    console.log(tours[0].guides[0])
+    console.log(tours[0].guides[0]);
     let plannerTours = await tours.filter(
       (tour) => tour.guides[0] == req.params.id
     );

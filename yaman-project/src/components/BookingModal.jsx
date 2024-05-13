@@ -43,9 +43,19 @@ const BookingModal = ({ setShowModal, tour }) => {
       body: JSON.stringify({ ...formData, price: totalPrice }),
       headers: { "Content-Type": "application/json" },
     }).then(async (res) => {
-      console.log(await res.json());
-      displayRazorpay(formData.price);
-      setShowModal(false);
+      if (res.ok) {
+        let data = await res.json();
+        displayRazorpay(formData.price);
+        setShowModal(false);
+        localStorage.setItem(
+          "booking",
+          JSON.stringify({
+            userdata: { ...formData },
+            price: totalPrice,
+            phone: data.planner.phoneno,
+          })
+        );
+      }
     });
   };
   function loadScript(src) {
@@ -104,14 +114,35 @@ const BookingModal = ({ setShowModal, tour }) => {
         const result = await axios.post("http://localhost:8000/success", data);
 
         alert(result.data.msg);
+        if (result.data.msg) {
+          localStorage.setItem("paymentSuccess", true);
+          setTimeout(() => {
+            let userData = JSON.parse(localStorage.getItem("booking"));
+            let paymentSuccess = JSON.parse(
+              localStorage.getItem("paymentSuccess")
+            );
+            console.log(paymentSuccess, userData);
+            if (paymentSuccess) {
+              window.location.href = `https://wa.me/${
+                userData.phone
+              }?text=Name:${userData.userdata.email.split("@")[0]}\n
+                Email: ${
+                userData.userdata.email
+              }\n Mobile Number: ${userData.userdata.phoneno}\n
+                Tour Id: ${userData.userdata.tourId}\n
+                Total Price: ₹${userData.price}
+              `;
+            }
+          }, 3000);
+        }
       },
       prefill: {
-        name: "Soumya Dey",
-        email: "SoumyaDey@example.com",
+        name: "Yaman Rampal ",
+        email: "xyz@example.com",
         contact: "8544875229",
       },
       notes: {
-        address: "Soumya Dey Corporate Office",
+        address: "XYZ CORP",
       },
       theme: {
         color: "#61dafb",
