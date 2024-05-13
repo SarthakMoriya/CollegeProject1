@@ -8,15 +8,17 @@ import { deleteUserById, getAllUsers, getUserById, login, signup } from "./contr
 import { createTour, deleteTour, getTour, getTours, getToursOfPlanner, updateTour,getPlannerDetails } from "./controllers/tourController.js";
 import { createBooking, deleteBooking, getBooking, getBookings, getPlannersBookings, updateBooking } from "./controllers/bookingController.js";
 
+import adminRouter from './routes/adminRoutes.js'
 
 const app = express();
 app.use(express.json())
 app.use(cors())
 
+app.use('/auth',adminRouter)
 
-
+// 0JgrcbxnXccNtdvC
 // DATABASE CONNECTION
-mongoose.connect("mongodb+srv://yamanrampal10:gyRIFuo6e0vWq1FW@cluster0.v4uzxlf.mongodb.net/?retryWrites=true&w=majority");
+mongoose.connect("mongodb+srv://sarthak:0JgrcbxnXccNtdvC@cluster0.dkryym7.mongodb.net/");
 
 app.listen(8000, function () {
     console.log("Server Started At 8000");

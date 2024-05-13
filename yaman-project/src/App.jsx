@@ -1,4 +1,6 @@
+import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/Signup";
 import Home from "./pages/Home/Home";
@@ -14,8 +16,11 @@ import Razorpay from "./components/RazorPay";
 import EditTour from "./pages/EditTour.jsx/EditTour";
 import Tour from "./pages/Tour/Tour";
 import ErrorBoundary from "./ErrorBoundary";
-
+import AdminLogin from "./pages/Admin/AdminLogin";
+import Panel from "./pages/Admin/Panel";
 const App = () => {
+  const user = useSelector((state) => state.auth.user);
+  console.log(user);
   return (
     <ErrorBoundary>
       <BrowserRouter>
@@ -24,17 +29,53 @@ const App = () => {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            {<Route path="/" element={<Home />} />}
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/create" element={<CreateTour />} />
-            <Route path="/bookings" element={<Booking />} />
-            <Route path="/tours" element={<Tours />} />
-            <Route path="/mytours" element={<MyTours />} />
-            <Route path="/mybookings" element={<MyBookings />} />
-            <Route path="/guidedetails/:id" element={<Guide />} />
-            <Route path="/pay" element={<Razorpay />} />
-            <Route path="/edit/:id" element={<EditTour />} />
-            <Route path="/tours/:id" element={<Tour />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route
+              path="/admin/panel"
+              element={user?.role != "admin" ? <Panel /> : <AdminLogin />}
+            />
+            {<Route path="/" element={user == null ? <Login /> : <Home />} />}
+            <Route
+              path="/about"
+              element={user == null ? <Login /> : <AboutUs />}
+            />
+            <Route
+              path="/create"
+              element={user == null ? <Login /> : <CreateTour />}
+            />
+            <Route
+              path="/bookings"
+              element={user == null ? <Login /> : <Booking />}
+            />
+            <Route
+              path="/tours"
+              element={user == null ? <Login /> : <Tours />}
+            />
+            <Route
+              path="/mytours"
+              element={user == null ? <Login /> : <MyTours />}
+            />
+            <Route
+              path="/mybookings"
+              element={user == null ? <Login /> : <MyBookings />}
+            />
+            <Route
+              path="/guidedetails/:id"
+              element={user == null ? <Login /> : <Guide />}
+            />
+            <Route
+              path="/pay"
+              element={user == null ? <Login /> : <Razorpay />}
+            />
+            <Route
+              path="/edit/:id"
+              element={user == null ? <Login /> : <EditTour />}
+            />
+            <Route
+              path="/tours/:id"
+              element={user == null ? <Login /> : <Tour />}
+            />
           </Routes>
         </div>
       </BrowserRouter>

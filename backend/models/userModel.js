@@ -6,9 +6,11 @@ const userschema = mongoose.Schema({
   username: String,
   role: {
     type: String,
-    enum: ["user", "planner"],
+    enum: ["user", "planner", "admin"],
     default: "user",
   },
+  isAdmin: { default: false, type: Boolean },
+  isAdminApproved: { default: false, type: Boolean },
 });
 const usermodel = mongoose.model("user", userschema);
 export default usermodel;

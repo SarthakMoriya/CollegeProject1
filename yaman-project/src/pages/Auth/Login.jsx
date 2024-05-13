@@ -28,6 +28,13 @@ const Login = () => {
         let data = await res.json();
         console.log(data);
         console.log(data.user.role);
+        if (data.user.isAdminApproved == false) {
+          alert(
+            "Account is yet to be approved by admin... Please try again later"
+          );
+          setloading(false);
+          return;
+        }
         if (res?.ok) {
           toastify("Redirecting to Home page! 😊");
           setTimeout(() => {
@@ -63,6 +70,16 @@ const Login = () => {
           transition={{ duration: 1.5, ease: "easeInOut" }}
           className="w-full max-w-xs"
         >
+          <div className="w-full flex items-center justify-center mt-8">
+            <Link className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+              <img
+                className="w-8 h-8 mr-2"
+                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+                alt="logo"
+              />
+              TravelWithStar
+            </Link>
+          </div>
           <form
             className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-blue-400 border-2 "
             onSubmit={handleSubmit}

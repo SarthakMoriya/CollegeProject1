@@ -58,7 +58,9 @@ const tourSchema = mongoose.Schema(
       default:
         "https://firebasestorage.googleapis.com/v0/b/yamanproject-4e8ba.appspot.com/o/1713700911175Flexi%20(1).png?alt=media&token=3c679253-9f80-42d7-831d-61adaf6d7830",
     },
-    destinations:[]
+    destinations: [],
+    isSafe: { type: Boolean, default: true },
+    isUnderSurvillence: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

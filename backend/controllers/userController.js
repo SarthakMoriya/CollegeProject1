@@ -59,3 +59,74 @@ export async function login(req, res) {
     res.status(500).json({ message: "ERROR", error });
   }
 }
+
+
+// ADMIN LOGIN
+export const adminLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (email === "yaman@gmail.com" && password === "yaman") {
+      const isAdmin = await usermodel.findOne({ email });
+      if (!isAdmin) return res.status(404).send("Invalid Credentials");
+
+      const token = jwt.sign({ id: isAdmin._id, email }, "topendseretpassword");
+
+      return res
+        .status(200)
+        .json({ token, user: isAdmin, admin: true, secretkey: 1234 });
+    } else {
+      return res.status(500).json("Invalid Credentials");
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Invalid Credentials" });
+  }
+};
+
+// ACCOUNTS TO BE APPROVED BY ADMIN
+
+export const approveAccounts = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const account = await usermodel.findById(id);
+    if (!account)
+      return res.status(404).json({ error: "Invalid Teacher Account!" });
+    account.isAdminApproved = true;
+    await account.save();
+    res.send({});
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+
+//  UNAPPROVED ACCOUNTS
+export const getUnapprovedAccounts = async (req, res) => {
+  try {
+    const unapprovedAccounts = await usermodel.find({
+      isAdminApproved: false,
+    });
+
+    res.send(unapprovedAccounts || []);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+
+// REJECT A TEACHER ACCOUNT
+export const deleteUnapprovedAccounts = async (req, res) => {
+  try {
+    await usermodel.findByIdAndDelete(req.params.id);
+    res.send("Teacher Account deleted");
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+
+
+export const getAllAccounts = async (req, res) => {
+  let accounts1 = await usermodel.find({role:"user"});
+  let accounts2 = await usermodel.find({role:"planner"});
+  accounts1=[...accounts1,...accounts2];
+  res.send(accounts1);
+};
