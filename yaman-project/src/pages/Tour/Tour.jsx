@@ -49,23 +49,23 @@ const Tour = () => {
       <br />
       <div className="flex gap-4  justify-center min-h-screen min-w-screen border border-white p-12">
         <div className="flex  flex-col w-1/2 ">
-          <div className="w-1/2  rounded-lg">
+          <div className="w-1/2 self-center shadow-xl">
             <img src={tour?.imageUrl} alt="" className="rounded-lg shadow-lg" />
           </div>
           <div className="flex flex-col border rounded-lg shadow-xl my-6 p-4 capitalize">
-            <div className="w-full text-center text-3xl font-bold my-6 text-white">
+            <div className="w-full text-center text-3xl font-bold my-4 text-white">
               Guide Details
             </div>
             <div className="flex  text-white text-xl gap-4 ">
-              <div className="">Name</div>
+              <div className="">Name:</div>
               <div className="">{guide?.email.split("@")[0]}</div>
             </div>
             <div className="flex  text-white text-xl gap-4 ">
-              <div className="">Phone No.</div>
+              <div className="">Phone No:</div>
               <div className="">{guide?.phoneno}</div>
             </div>
             <div className="flex  text-white text-xl gap-4 ">
-              <div className="">Email Address</div>
+              <div className="">Email Address:</div>
               <div className="">{guide?.email}</div>
             </div>
           </div>
@@ -93,44 +93,62 @@ const Tour = () => {
           </div>
           <div className="flex items-center justify-start gap-4 text-white ml-8 p-4">
             <PriceIcon />
-            <div className="">₹{tour?.price}</div>
+            <div className="">₹{tour?.price} /person</div>
           </div>
           <div className="flex items-center justify-start gap-4 text-white ml-8 p-4">
             <RatingsIcon />
-            <div className="">{tour?.ratingAverage}</div>
+            <div className="">{tour?.ratingAverage} Ratings</div>
           </div>
           <div className="flex items-center justify-start gap-4 text-white ml-8 p-4">
             <DescriptionIcon />
             <div className="">{tour?.desc}</div>
           </div>
-          <button
-            onClick={handleBooking}
-            className="ml-8 p-3 rounded-8 border text-white border-white text-2xl font-bold rounded-lg hover:bg-blue-500 ease-out duration-500"
-          >
-            Book Tour
-          </button>
+          <div className="flex items-center justify-start gap-4">
+            <button
+              onClick={handleBooking}
+              className="ml-8 p-2 rounded-8 border text-white border-white text-xl font-semibold rounded-lg hover:bg-blue-500 ease-out duration-500"
+            >
+              Book Tour
+            </button>
+          </div>
+          <br />
+          <br />
         </div>
       </div>
-      <HeadingWrapper heading={"Destinations Covered"}/>
-      <div className="w-screen mb-4 flex gap-4 flex-wrap justify-center">
-        {tour?.destinations.map((dest, i) => (
-          <div key={i} className="text-white w-[400px] border">
-            <img
-              src={
-                dest.destimg ==
-                ""
-                  ? "https://firebasestorage.googleapis.com/v0/b/yamanproject-4e8ba.appspot.com/o/1715253469516goa.jpg?alt=media&token=791f22aa-e186-4823-9ff8-4bf4df94f511"
-                  : dest.destimg
-              }
-              alt=""
-              className="max-w-[400px] max-h-[300px]"
-            />
-            <div className="p-3 capitalize text-lg font-semibold border">{i+1}){dest.descttitle}</div>
-            <div className="p-3 capitalize text-lg font-semibold border max-h-[100px] h-full overflow-hidden text-ellipsis">{dest.desctdesc}</div>
-            <div className="p-3 capitalize text-lg font-semibold border">{dest.desctdate}</div>
-          </div>
-        ))}
+      <div className="w-screen mb-4 flex flex-col gap-4 flex-wrap justify-center min-h-screen  items-center">
+        <HeadingWrapper heading={"Destinations Covered"} />
+        <div className=" flex items-center gap-4">
+          {tour?.destinations.map((dest, i) => (
+            <div
+              key={i}
+              className="text-white max-w-[401px] w-[401px] shadow-lg border h-[500px]"
+            >
+              <img
+                src={
+                  dest.destimg == ""
+                    ? "https://firebasestorage.googleapis.com/v0/b/yamanproject-4e8ba.appspot.com/o/1715253469516goa.jpg?alt=media&token=791f22aa-e186-4823-9ff8-4bf4df94f511"
+                    : dest.destimg
+                }
+                alt=""
+                className="max-w-[400px] max-h-[300px] h-full"
+              />
+              <div className="p-3 capitalize text-lg font-semibold ">
+                {i + 1}){dest.descttitle}
+              </div>
+              <div className="p-3 capitalize text-lg font-semibold ">
+                Date: {formatDate(dest.desctdate)}
+              </div>
+              <div className="p-3 capitalize text-lg font-semibold  h-full overflow-hidden text-ellipsis">
+                {dest.desctdesc}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+      <br />
+      <br />
+      <br />
+      <br />
       {showModal && <BookingModal setShowModal={setShowModal} tour={tour} />}
       <Footer />
     </>
