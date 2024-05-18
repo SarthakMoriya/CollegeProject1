@@ -39,9 +39,10 @@ const Panel = () => {
   }, []);
   return (
     <div className="bg-primary min-h-screen border border-secondary ">
+      <br /><br /><br />
       {unapprovedAccounts?.length !== 0 && (
         <div className="flex items-center justify-center">
-        <div className="border-secondary border-b-4  text-2xl font-semibold text-white my-4">
+        <div className="border-secondary border-b-4  text-2xl font-semibold text-black my-4">
           Pending Requests
         </div>
       </div>
@@ -56,7 +57,7 @@ const Panel = () => {
       )}
       <div className=" p-2">
         <div className="flex items-center justify-center">
-          <div className="border-secondary border-b-4  text-2xl font-semibold text-white my-4">
+          <div className="border-secondary border-b-4  text-2xl font-semibold text-black my-4">
             All Accounts
           </div>
         </div>
@@ -88,7 +89,7 @@ const Panel = () => {
                       handleApprove(acc);
                     }}
                     disabled={acc?.isAdminApprovedAccount ? "true" : "false"}
-                    className={`text-black bg-blue hover:bg-secondary focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium  text-sm px-2.5 sm:px-5 py-2.5 text-center mr-2 mb-2 mt-2 w-48 rounded-lg  ease-in-out duration-500 ${
+                    className={`text-black border bg-blue hover:bg-secondary focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium  text-sm px-2.5 sm:px-5 py-2.5 text-center mr-2 mb-2 mt-2 w-48 rounded-lg  ease-in-out duration-500 ${
                       acc?.isAdminApprovedAccount
                         ? "cursor-not-allowed"
                         : "cursor-pointer"
@@ -103,7 +104,7 @@ const Panel = () => {
                     onClick={() => {
                       handleDelete(acc);
                     }}
-                    className="text-black bg-secondary hover:bg-blue focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium  text-sm px-2.5 sm:px-5 py-2.5 text-center mr-2 mb-2 mt-2 w-48 rounded-lg  ease-in-out duration-500"
+                    className="text-black border bg-secondary hover:bg-blue focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium  text-sm px-2.5 sm:px-5 py-2.5 text-center mr-2 mb-2 mt-2 w-48 rounded-lg  ease-in-out duration-500"
                   >
                     {acc?.isAdminApproved
                       ? "Delete Account"

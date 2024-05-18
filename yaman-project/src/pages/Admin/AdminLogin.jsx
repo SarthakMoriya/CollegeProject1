@@ -36,7 +36,6 @@ const AdminLogin = () => {
         setLogin({
           user: data.user,
           token: data.token,
-          secretkey: data.secretkey,
         })
       );
       localStorage.setItem("is_verified", data?.user?.verified);

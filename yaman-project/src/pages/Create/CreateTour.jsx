@@ -24,6 +24,7 @@ const CreateTour = () => {
   });
   const [image, setImage] = useState(null);
   const [showUploadedImage, setShowUploadedImage] = useState("");
+  const [isAdding, setIsAdding] = useState(false)
   const [addDest, setAddDest] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
   const [formData, setFormData] = useState({
@@ -399,12 +400,12 @@ const CreateTour = () => {
                       required=""
                     />
                     <div
-                      className=""
+                      className="inline-flex items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-white hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out"
                       onClick={() => {
                         handleDestinationImage();
                       }}
                     >
-                      ADD IMAGE
+                      Add Image
                     </div>
                   </div>
                   <div>
@@ -467,7 +468,10 @@ const CreateTour = () => {
                       required=""
                     />
                   </div>
-                  <div className="" onClick={handleDestination}>
+                  <div
+                    className="inline-flex items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-white hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out"
+                    onClick={handleDestination}
+                  >
                     Save
                   </div>
                 </div>
@@ -476,16 +480,19 @@ const CreateTour = () => {
             <button
               type="button"
               onClick={() => setAddDest(!addDest)}
-              className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800"
+              className="inline-flex items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-white hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out"
             >
-              Add Destinations
+              {addDest?"Save Destinations":"Add Destinations"}
             </button>
-            <button
-              type="submit"
-              className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800"
-            >
-              Add Tour
-            </button>
+            <br />
+            <div className="">
+              <button
+                type="submit"
+                className=" items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-white hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out w-full"
+              >
+                Add Tour
+              </button>
+            </div>
           </form>
         </div>
       </section>

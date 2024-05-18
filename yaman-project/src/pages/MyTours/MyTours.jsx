@@ -44,77 +44,79 @@ const MyTours = () => {
   }, []);
   return (
     <>
-      <div className="border-b-4 border-blue-500">
+      <div className="border-b-4 border-blue-500 ">
         <br />
         <br />
         <br />
         <br />
         <HeadingWrapper heading={"YOUR TOURS"} />
-        <div className="flex flex-wrap items-center justify-center gap-4 m-6">
+        <div className="flex flex-wrap justify-center gap-4 m-6 ">
           {tours.length &&
             tours.map((tour) => (
               <div
                 key={tour?._id}
-                className="border-2  shadow-sm mx-2 "
+                className="border-2 bg-slate-200 shadow-sm mx-2 max-w-[400px] "
               >
-                <img src={tour?.imageUrl} alt="" className="max-w-[400px] max-h-[267px]" />
+                <div className="max-w-[397px] max-h-[300px] overflow-hidden">
+                  <img
+                    src={tour?.imageUrl}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <div className=" flex flex-col">
-                  <div className="flex items-center justify-around">
-                    <div className="flex items-center justify-center gap-4 text-white mt-4 mb-2">
-                      <TitleIcon />
-                      <div className="capitalize">{tour?.title}</div>
-                    </div>
-                    <div className="flex items-center justify-center gap-4 text-white mt-4 mb-2">
-                      <Location />
-                      <div className="capitalize">{tour?.location}</div>
-                    </div>
-                    <div className="flex items-center justify-center gap-4 text-white my-2">
-                      <PriceIcon />
-                      <div className="capitalize">{tour?.price}</div>
+                  <div className="flex items-center justify-center gap-4 text-black mt-4 mb-2">
+                    <TitleIcon />
+                    <div className="capitalize">{tour?.title}</div>
+                  </div>
+                  <div className="flex items-center justify-center gap-4 text-black mt-4 mb-2">
+                    <Location />
+                    <div className="capitalize">{tour?.location}</div>
+                  </div>
+                  <div className="flex items-center justify-center gap-4 text-black my-2">
+                    <PriceIcon />
+                    <div className="capitalize">{tour?.price}</div>
+                  </div>
+                  <div className="flex items-center justify-center gap-4 text-black my-2">
+                    <GroupSize />
+                    <div className="capitalize">{tour?.maxGroupSize}</div>
+                  </div>
+                  <div className="flex items-center justify-center gap-4 text-black my-2">
+                    <RatingsIcon />
+                    <div className="capitalize">
+                      <div className="">{tour?.ratingAverage}</div>
                     </div>
                   </div>
-                  <div className="flex items-center justify-around">
-                    <div className="flex items-center justify-center gap-4 text-white my-2">
-                      <GroupSize />
-                      <div className="capitalize">{tour?.maxGroupSize}</div>
-                    </div>
-                    <div className="flex items-center justify-center gap-4 text-white my-2">
-                      <RatingsIcon />
-                      <div className="capitalize">
-                        <div className="">{tour?.ratingAverage}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-center gap-4 text-white my-2">
-                      <CalendarIcon />
-                      <div className="capitalize">
-                        {tour?.startDate.slice(0, 10)}
-                      </div>
+                  <div className="flex items-center justify-center gap-4 text-black my-2">
+                    <CalendarIcon />
+                    <div className="capitalize">
+                      {tour?.startDate.slice(0, 10)}
                     </div>
                   </div>
-                  </div>
-                  <div className="flex items-center justify-center gap-8">
-                    <button
-                      data-modal-target="crud-modal"
-                      data-modal-toggle="crud-modal"
-                      className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 flex items-center justify-center my-2"
-                      type="button"
-                      onClick={() => {
-                        editTour(tour);
-                      }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      data-modal-target="crud-modal"
-                      data-modal-toggle="crud-modal"
-                      className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 flex items-center justify-center my-2"
-                      type="button"
-                      onClick={() => {
-                        deleteTour(tour);
-                      }}
-                    >
-                      Delete
-                    </button>
+                </div>
+                <div className="flex items-center justify-center gap-8">
+                  <button
+                    data-modal-target="crud-modal"
+                    data-modal-toggle="crud-modal"
+                    className=" text-black bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 flex items-center justify-center my-2"
+                    type="button"
+                    onClick={() => {
+                      editTour(tour);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    data-modal-target="crud-modal"
+                    data-modal-toggle="crud-modal"
+                    className=" text-black bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 flex items-center justify-center my-2"
+                    type="button"
+                    onClick={() => {
+                      deleteTour(tour);
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}

@@ -34,7 +34,11 @@ const Signup = () => {
             toastify("Signup successful");
             setTimeout(() => {
               dispatch(setLogin({ ...data }));
-              navigate("/");
+              if(role=='user'){
+                  navigate("/login")
+              }else{
+                navigate("/login");
+              }
               setloading(false);
               setEmail("");
               setPassword("");
@@ -59,11 +63,22 @@ const Signup = () => {
             <span className="text-blue-600 opacity-90 z-10">Loading</span>
           </div>
         )}
+        
         <motion.div
           whileInView={{ opacity: [0, 1] }}
           transition={{ duration: 1.5, ease: "easeInOut" }}
           className="w-full max-w-xs"
         >
+          <div className="w-full flex items-center justify-center mt-8">
+            <Link className="flex items-center mb-6 text-2xl font-semibold text-gray-900 ">
+              <img
+                className="w-8 h-8 mr-2"
+                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+                alt="logo"
+              />
+              TravelWithStar
+            </Link>
+          </div>
           <form
             className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-blue-400 border-2 "
             onSubmit={handleSubmit}

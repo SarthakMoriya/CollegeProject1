@@ -24,7 +24,7 @@ const App = () => {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <div className="bg-slate-900">
+        <div className="">
           <Navbar />
           <Routes>
             <Route path="/login" element={<Login />} />
@@ -33,7 +33,7 @@ const App = () => {
             <Route path="/admin" element={<AdminLogin />} />
             <Route
               path="/admin/panel"
-              element={user?.role != "admin" ? <Panel /> : <AdminLogin />}
+              element={user?.role == "admin" ? <Panel /> : <AdminLogin />}
             />
             {<Route path="/" element={user == null ? <Login /> : <Home />} />}
             <Route

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import p1 from "../../assets/todo/andaman.jpg";
 import p2 from "../../assets/todo/kerela.jpg";
-import p3 from "../../assets/todo/lakshadweep.jpg";
+import p3 from "../../assets/todo/bangalore.jpg";
 import p4 from "../../assets/todo/leh.jpg";
 import p5 from "../../assets/todo/goa.jpg";
 import p6 from "../../assets/todo/kashmir.jpg";
@@ -10,12 +10,12 @@ import p6 from "../../assets/todo/kashmir.jpg";
 const Todo = () => {
   const navigate = useNavigate();
   const cities = [
-    "Amritsar",
+    "Andaman",
     "Kerela",
     "Banglore",
-    "Delhi",
-    "Chennai",
-    "Mumbai",
+    "Leh ",
+    "Goa",
+    "Kashmir",
   ];
   const imgs = [p1, p2, p3, p4, p5, p6];
   return (
@@ -28,7 +28,7 @@ const Todo = () => {
           className="w-[15%] bg-white"
           onClick={() => {
             navigate(
-              `/tours?location=${c.toLowerCase()}&groupsize=1&price=1000`
+              `/tours?location=${c.toLowerCase()}`
             );
           }}
         >

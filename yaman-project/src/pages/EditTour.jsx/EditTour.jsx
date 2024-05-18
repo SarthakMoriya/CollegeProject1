@@ -8,14 +8,7 @@ const EditTour = () => {
   const user = useSelector((state) => state.auth.user);
   const params = useParams();
   const [tour, setTour] = useState(null);
-  const [destinations, setDestinations] = useState([
-    {
-      destimg: "",
-      desctdate: new Date(),
-      desctdesc: "",
-      descttitle: "",
-    },
-  ]);
+  const [destinations, setDestinations] = useState([]);
   const [formData, setFormData] = useState({
     _id: "",
     title: "",
@@ -39,9 +32,9 @@ const EditTour = () => {
         if (res.ok) {
           let data = await res.json();
           if (res.ok) {
-            setTour(data);
-            setFormData(data);
-            setDestinations(data?.destinations);
+            setTour(data.tour);
+            setFormData(data.tour);
+            setDestinations(data?.tour?.destinations);
           }
         }
       })
@@ -293,7 +286,7 @@ const EditTour = () => {
               </div>
             </div>
             <br />
-            {destinations &&
+            {destinations?.length &&
               destinations?.map((dest, i) => (
                 <div key={i}>
                   <br />
@@ -362,12 +355,13 @@ const EditTour = () => {
                 </div>
               ))}
             <button
+              type="button"
               className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800"
               onClick={handleDestinationsFinal}
             >
               Save Destinations Data
             </button>
-              <br />
+            <br />
             <button
               type="submit"
               className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800"

@@ -52,3 +52,7 @@
   height: 100%;
   object-fit: cover; /* This property ensures the image fills the container without distorting its aspect ratio */
 }
+
+*{
+  color:black !important;
+}

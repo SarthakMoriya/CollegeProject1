@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 export const BASE_URL = "http://localhost:8000";
 
 export const formatDate = (dateString) => {
-  console.log(dateString);
+  // console.log(dateString);
   
   // Create a new Date object from the string (ignoring time portion for formatting)
   const dateObj = new Date(dateString);

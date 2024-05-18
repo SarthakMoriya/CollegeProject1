@@ -16,6 +16,7 @@ import { setBooking } from "../../state";
 import BookingModal from "../../components/BookingModal";
 import DescriptionIcon from "../../icons/DescriptionIcon";
 import Footer from "../../components/Footer";
+import TourGuideCard from "../../components/TourGuideCard";
 
 const Tour = () => {
   const params = useParams();
@@ -48,42 +49,32 @@ const Tour = () => {
       <br />
       <br />
       <div className="flex gap-4  justify-center min-h-screen min-w-screen border border-white p-12">
-        <div className="flex  flex-col w-1/2 ">
-          <div className="w-1/2 self-center shadow-xl">
+        <div className="flex  flex-col w-1/2 min-h-1/2 rounded-lg shadow-xl border">
+          <div className="w-1/2 self-center shadow-xl mt-4">
             <img src={tour?.imageUrl} alt="" className="rounded-lg shadow-lg" />
           </div>
-          <div className="flex flex-col border rounded-lg shadow-xl my-6 p-4 capitalize">
-            <div className="w-full text-center text-3xl font-bold my-4 text-white">
+
+          <div className="flex flex-col  rounded-lg  my-6 p-4 capitalize">
+            <div className="w-full text-center text-3xl font-bold my-4 text-black">
               Guide Details
             </div>
-            <div className="flex  text-white text-xl gap-4 ">
-              <div className="">Name:</div>
-              <div className="">{guide?.email.split("@")[0]}</div>
-            </div>
-            <div className="flex  text-white text-xl gap-4 ">
-              <div className="">Phone No:</div>
-              <div className="">{guide?.phoneno}</div>
-            </div>
-            <div className="flex  text-white text-xl gap-4 ">
-              <div className="">Email Address:</div>
-              <div className="">{guide?.email}</div>
-            </div>
+            <TourGuideCard guide={guide} />
           </div>
         </div>
         <div className="w-1/2 min-h-1/4 border rounded-lg shadow-xl">
-          <div className="flex items-center justify-start gap-4 text-white  ml-8 p-4">
+          <div className="flex items-center justify-start gap-4 text-black  ml-8 p-4">
             <TitleIcon />
             <div className="">{tour?.title}</div>
           </div>
-          <div className="flex items-center justify-start gap-4 text-white ml-8 p-4">
+          <div className="flex items-center justify-start gap-4 text-black ml-8 p-4">
             <Location />
             <div className="">{tour?.location}</div>
           </div>
-          <div className="flex items-center justify-start gap-4 text-white ml-8 p-4">
+          <div className="flex items-center justify-start gap-4 text-black ml-8 p-4">
             <GroupSize />
-            <div className="">{tour?.maxGroupSize}</div>
+            <div className="">{tour?.maxGroupSize} Persons allowed</div>
           </div>
-          <div className="flex items-center justify-start gap-4 text-white ml-8 p-4">
+          <div className="flex items-center justify-start gap-4 text-black ml-8 p-4">
             <CalendarIcon />
             <div className="flex gap-4">
               <div className="">{formatDate(tour?.startDate)}</div>
@@ -91,28 +82,26 @@ const Tour = () => {
               <div className="">{formatDate(tour?.endDate)}</div>
             </div>
           </div>
-          <div className="flex items-center justify-start gap-4 text-white ml-8 p-4">
+          <div className="flex items-center justify-start gap-4 text-black ml-8 p-4">
             <PriceIcon />
             <div className="">₹{tour?.price} /person</div>
           </div>
-          <div className="flex items-center justify-start gap-4 text-white ml-8 p-4">
+          <div className="flex items-center justify-start gap-4 text-black ml-8 p-4">
             <RatingsIcon />
             <div className="">{tour?.ratingAverage} Ratings</div>
           </div>
-          <div className="flex items-center justify-start gap-4 text-white ml-8 p-4">
+          <div className="flex items-center justify-start gap-4 text-black ml-8 p-4">
             <DescriptionIcon />
             <div className="">{tour?.desc}</div>
           </div>
           <div className="flex items-center justify-start gap-4">
             <button
               onClick={handleBooking}
-              className="ml-8 p-2 rounded-8 border text-white border-white text-xl font-semibold rounded-lg hover:bg-blue-500 ease-out duration-500"
+              className="ml-8 p-2 border rounded-8 border-black text-black text-lg font-semibold rounded-lg hover:bg-blue-500 ease-out duration-500"
             >
               Book Tour
             </button>
           </div>
-          <br />
-          <br />
         </div>
       </div>
       <div className="w-screen mb-4 flex flex-col gap-4 flex-wrap justify-center min-h-screen  items-center">
@@ -121,7 +110,7 @@ const Tour = () => {
           {tour?.destinations.map((dest, i) => (
             <div
               key={i}
-              className="text-white max-w-[401px] w-[401px] shadow-lg border h-[500px]"
+              className="text-black max-w-[401px] w-[401px] shadow-lg border h-[500px]"
             >
               <img
                 src={

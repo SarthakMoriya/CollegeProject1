@@ -6,9 +6,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import p1 from "../../assets/trendingDest/amritsar.jpeg";
-import BookingModal from "../../components/BookingModal";
-import { setBooking } from "../../state";
 import HeadingWrapper from "../../components/HeadingWrapper";
 import BookingCard from "../../components/BookingCard";
 import Footer from "../../components/Footer";
@@ -19,6 +16,7 @@ const Tours = () => {
   const dispatch = useDispatch();
   const [tours, setTours] = useState([]);
   const [searchTours, setSearchTours] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
   const [error, setError] = useState("");
 
   const [ratedTours, setRatedTours] = useState([]);
@@ -42,7 +40,7 @@ const Tours = () => {
   const fetchTours = async () => {
     const res = await fetch(`${BASE_URL}/gettours`);
     const data = await res.json();
-    console.log(data)
+    // console.log(data);
     if (res.ok) {
       setTours(data);
       setRatedTours(data.filter((tour) => tour.ratingAverage > 3));
@@ -53,22 +51,31 @@ const Tours = () => {
     }
   };
   const filterBookingFromURL = async () => {
+    console.log("I was called");
     const queryParams = new URLSearchParams(window.location.search);
+    console.log(queryParams.size);
     let location = queryParams.get("location");
     let price = queryParams.get("price");
     let groupsize = queryParams.get("groupsize");
     let allTours = await fetchTours();
-    let filteredTours = await allTours.filter((tour) => {
-      if (
-        tour.location == location &&
-        tour.maxGroupSize >= groupsize &&
-        tour.price >= price
-      ) {
-        return tour;
-      }
-    });
-    console.log(filteredTours);
-    setSearchTours(filteredTours);
+    if (queryParams.size > 0) {
+      let filteredTours = await allTours.filter((tour) => {
+        console.log(tour);
+        if (
+          tour.location.toLowerCase() == location &&
+          tour.maxGroupSize >= groupsize &&
+          tour.price >= price
+        ) {
+          return tour;
+        }
+      });
+      console.log(filteredTours);
+      setSearchTours(filteredTours);
+      setIsSearch(true);
+    } else {
+      setIsSearch(false);
+      console.log("Still called");
+    }
   };
   useEffect(() => {
     fetchTours();
@@ -79,10 +86,34 @@ const Tours = () => {
     infinite: true,
     speed: 500,
     slidesToShow: 4,
-    slidesToScroll: 3,
-    // autoplay: true,
-    // autoplaySpeed: 2000,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
+
   return (
     <>
       <div className=" mb-8">
@@ -132,16 +163,15 @@ const Tours = () => {
         {searchTours.length && (
           <>
             <HeadingWrapper heading={"Search Results"} />
-            <div className="slider-container">
-              <Slider {...settings}>
-                {tours.slice(0, 10).map((tour) => (
-                  <BookingCard key={tour?._id} tour={tour} />
-                ))}
-              </Slider>
+            <br />
+            <div className="flex items-center flex-wrap justify-center">
+              {searchTours.map((tour) => (
+                <BookingCard key={tour?._id} tour={tour} />
+              ))}
             </div>
           </>
         )}
-        {searchTours.length == 0 && (
+        {searchTours.length == 0 && isSearch && (
           <div className="flex items-center justify-center w-screen text-2xl font-bold text-blue-400 mt-10">
             {" "}
             No Tours Found...

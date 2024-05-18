@@ -6,7 +6,7 @@ import HeadingWrapper from "../../components/HeadingWrapper";
 
 const Home = () => {
   return (
-    <div className=" w-full mx-auto absolute bg-gray-900">
+    <div className=" w-full mx-auto absolute ">
       <br />
       <br />
       <br />
