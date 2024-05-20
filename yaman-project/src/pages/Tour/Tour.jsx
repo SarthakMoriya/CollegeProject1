@@ -18,6 +18,7 @@ import DescriptionIcon from "../../icons/DescriptionIcon";
 import Footer from "../../components/Footer";
 import TourGuideCard from "../../components/TourGuideCard";
 
+
 const Tour = () => {
   const params = useParams();
   const [tour, setTour] = useState(null);
@@ -106,7 +107,7 @@ const Tour = () => {
       </div>
       <div className="w-screen mb-4 flex flex-col gap-4 flex-wrap justify-center min-h-screen  items-center">
         <HeadingWrapper heading={"Destinations Covered"} />
-        <div className=" flex items-center gap-4">
+        <div className=" flex gap-4 flex-wrap justify-center">
           {tour?.destinations.map((dest, i) => (
             <div
               key={i}
@@ -127,7 +128,9 @@ const Tour = () => {
               <div className="p-3 capitalize text-lg font-semibold ">
                 Date: {formatDate(dest.desctdate)}
               </div>
-              <div className="p-3 capitalize text-lg font-semibold  h-full overflow-hidden text-ellipsis">
+              <div className="
+              truncate
+              p-3 capitalize text-lg font-semibold  h-full">
                 {dest.desctdesc}
               </div>
             </div>

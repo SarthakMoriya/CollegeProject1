@@ -27,7 +27,7 @@ const SearchBar = () => {
           placeholder="location"
           onChange={handleChange}
           value={formData.location}
-          className="p-3 rounded-lg "
+          className="p-3 rounded-lg border border-black"
         />
         <input
           type="number"
@@ -35,7 +35,7 @@ const SearchBar = () => {
           value={formData.price}
           placeholder="price"
           onChange={handleChange}
-          className="p-3 rounded-lg "
+          className="p-3 rounded-lg border border-black"
         />
         <input
           type="text"
@@ -43,7 +43,7 @@ const SearchBar = () => {
           value={formData.groupsize}
           placeholder="group size"
           onChange={handleChange}
-          className="p-3 rounded-lg "
+          className="p-3 rounded-lg border border-black"
         />
         <button 
         className="p-2 border border-slate-700 rounded-lg hover:rounded-none hover:bg-slate-500 text-white ease-in duration-500  bg-blue-500">

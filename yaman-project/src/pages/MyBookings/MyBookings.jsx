@@ -15,29 +15,28 @@ const MyBookings = () => {
   const [status, setStatus] = useState("");
   console.log(user);
   const fetchUserBooking = async () => {
-    await fetch(`${BASE_URL}/plannerbookings/${user._id}`).then(
-      async (res) => {
-        if (res.ok) {
-          let data = await res.json();
-          console.log(data);
-          setBookings(data);
-          setStatus(data[0].status);
-        }
+    await fetch(`${BASE_URL}/plannerbookings/${user._id}`).then(async (res) => {
+      if (res.ok) {
+        let data = await res.json();
+        console.log(data);
+        setBookings(data);
+        setStatus(data[0].status);
       }
-    );
+    });
   };
-  const handleStatus = async (booking, e) => {
-    console.log(e.target.value, booking);
-    setStatus(e.target.value);
-    await fetch(`${BASE_URL}/bookings`, {
+  const handleStatus = async (booking) => {
+    const res = await fetch(`${BASE_URL}/bookings`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         ...booking,
-        status: e.target.value,
+        status: booking.status == "approved" ? "pending" : "approved",
         id: booking._id,
       }),
     });
+    if (res.ok) {
+      window.location.reload();
+    }
   };
   useEffect(() => {
     fetchUserBooking();
@@ -78,24 +77,17 @@ const MyBookings = () => {
                   <div className="flex items-center justify-center gap-2">
                     <StatusIcon />
                     <div className="">
-                      <select
-                        name=""
-                        id=""
-                        value={status}
-                        className="text-black"
-                        onChange={(e) => {
-                          console.log(e.target.value);
-                          handleStatus(booking, e);
-                          // setStatus(e.target.value)
-                        }}
-                      >
-                        <option value="pending" className="text-black">
-                          Pending
-                        </option>
-                        <option value="approved" className="text-black">
-                          Approved
-                        </option>
-                      </select>
+                      <div className="">
+                        <div className="capitalize">Current Status: {booking.status}</div>
+                        <button
+                          className="border p-2 bg-blue-400 rounded-lg"
+                          onClick={() => {
+                            handleStatus(booking);
+                          }}
+                        >
+                          Update Status
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

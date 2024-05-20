@@ -90,15 +90,15 @@ const EditTour = () => {
       <ToastContainer />
       <section className="bg-white dark:bg-gray-900 border-b-2 border-blue-700">
         <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-          <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-            Add a new tour
+          <h2 className="mb-4 text-xl font-bold text-white mt-8">
+            Update Tour
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
               <div className="sm:col-span-2">
                 <label
                   htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium  text-white"
                 >
                   Tour Name
                 </label>
@@ -109,7 +109,7 @@ const EditTour = () => {
                   defaultValue={tour?.title}
                   value={formData.title}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Type tour name"
                   required="true"
                 />
@@ -117,7 +117,7 @@ const EditTour = () => {
               <div className="w-full">
                 <label
                   htmlFor="location"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium  text-white"
                 >
                   Location
                 </label>
@@ -128,7 +128,7 @@ const EditTour = () => {
                   value={formData.location}
                   defaultValue={tour?.location}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="location"
                   required="true"
                 />
@@ -136,7 +136,7 @@ const EditTour = () => {
               <div className="w-full">
                 <label
                   htmlFor="price"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white "
                 >
                   Price
                 </label>
@@ -147,7 +147,7 @@ const EditTour = () => {
                   defaultValue={tour?.price}
                   value={formData.price}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="$2999"
                   required="true"
                 />
@@ -155,14 +155,14 @@ const EditTour = () => {
               <div>
                 <label
                   htmlFor="category"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white text-white"
                 >
                   Age
                 </label>
                 <select
                   id="age"
                   name="age"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   value={formData.age}
                   onChange={handleChange}
                 >
@@ -176,14 +176,14 @@ const EditTour = () => {
               <div>
                 <label
                   htmlFor="difficulty"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium  text-white"
                 >
                   Difficulty
                 </label>
                 <select
                   id="difficulty"
                   name="difficulty"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   value={formData.difficulty}
                   onChange={handleChange}
                 >
@@ -197,7 +197,7 @@ const EditTour = () => {
               <div>
                 <label
                   htmlFor="duration"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white "
                 >
                   Duration
                 </label>
@@ -207,7 +207,7 @@ const EditTour = () => {
                   id="duration"
                   value={formData.duration}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="12"
                   required=""
                 />
@@ -215,7 +215,7 @@ const EditTour = () => {
               <div>
                 <label
                   htmlFor="groupsize"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   Group Size
                 </label>
@@ -225,7 +225,7 @@ const EditTour = () => {
                   id="groupsize"
                   value={formData.maxGroupSize}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="12"
                   required="true"
                 />
@@ -233,7 +233,7 @@ const EditTour = () => {
               <div>
                 <label
                   htmlFor="startDate"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white "
                 >
                   Start date
                 </label>
@@ -243,7 +243,7 @@ const EditTour = () => {
                   id="item-weight"
                   value={formData.startDate}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="12"
                   required=""
                 />
@@ -251,7 +251,7 @@ const EditTour = () => {
               <div>
                 <label
                   htmlFor="endDate"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   End date
                 </label>
@@ -261,7 +261,7 @@ const EditTour = () => {
                   id="endDate"
                   value={formData.endDate}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="12"
                   required=""
                 />
@@ -270,7 +270,7 @@ const EditTour = () => {
               <div className="sm:col-span-2">
                 <label
                   htmlFor="description"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   Description
                 </label>
@@ -280,7 +280,7 @@ const EditTour = () => {
                   name="desc"
                   value={formData.desc}
                   onChange={handleChange}
-                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="block p-2.5 w-full text-sm bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Your description here"
                 ></textarea>
               </div>
@@ -294,7 +294,7 @@ const EditTour = () => {
                     <div>
                       <label
                         htmlFor="descttitle"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        className="block mb-2 text-sm font-medium text-white"
                       >
                         Destination Title {i + 1}
                       </label>
@@ -306,7 +306,7 @@ const EditTour = () => {
                         onChange={(e) => {
                           handleDestinationForm(e, i);
                         }}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         placeholder="12"
                         required=""
                       />
@@ -314,7 +314,7 @@ const EditTour = () => {
                     <div>
                       <label
                         htmlFor="descdate"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        className="block mb-2 text-sm font-medium text-white"
                       >
                         Destination Date
                       </label>
@@ -326,7 +326,7 @@ const EditTour = () => {
                         onChange={(e) => {
                           handleDestinationForm(e, i);
                         }}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         placeholder="12"
                         required=""
                       />
@@ -334,7 +334,7 @@ const EditTour = () => {
                     <div>
                       <label
                         htmlFor="desctdesc"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        className="block mb-2 text-sm font-medium text-white text-white"
                       >
                         Destination Description
                       </label>
@@ -346,7 +346,7 @@ const EditTour = () => {
                         onChange={(e) => {
                           handleDestinationForm(e, i);
                         }}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         placeholder="12"
                         required=""
                       />
@@ -356,7 +356,7 @@ const EditTour = () => {
               ))}
             <button
               type="button"
-              className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800"
+              className=" items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-black hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out w-full"
               onClick={handleDestinationsFinal}
             >
               Save Destinations Data
@@ -364,7 +364,7 @@ const EditTour = () => {
             <br />
             <button
               type="submit"
-              className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800"
+              className=" items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-black hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out w-full"
             >
               Update Tour
             </button>

@@ -12,7 +12,7 @@ const Todo = () => {
   const cities = [
     "Andaman",
     "Kerela",
-    "Banglore",
+    "Bangalore",
     "Leh ",
     "Goa",
     "Kashmir",

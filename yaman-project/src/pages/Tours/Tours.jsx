@@ -135,7 +135,7 @@ const Tours = () => {
                 placeholder="location"
                 onChange={handleChange}
                 value={formData.location}
-                className="p-3 rounded-lg"
+                className="p-3 rounded-lg border border-black"
               />
               <input
                 type="number"
@@ -143,7 +143,7 @@ const Tours = () => {
                 value={formData.price}
                 placeholder="price"
                 onChange={handleChange}
-                className="p-3 rounded-lg"
+                className="p-3 rounded-lg border border-black"
               />
               <input
                 type="text"
@@ -151,7 +151,7 @@ const Tours = () => {
                 value={formData.groupsize}
                 placeholder="group size"
                 onChange={handleChange}
-                className="p-3 rounded-lg"
+                className="p-3 rounded-lg border border-black"
               />
               <button className="p-3 border bg-blue-500 border-slate-700 rounded-lg hover:rounded-none hover:bg-slate-500 hover:text-white ease-in duration-500 ">
                 Search

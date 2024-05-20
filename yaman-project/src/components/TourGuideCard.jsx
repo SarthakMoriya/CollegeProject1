@@ -20,7 +20,7 @@ const TourGuideCard = ({ guide }) => {
           <span className="font-semibold">Email:</span> {guide?.email}
         </p>
         <a
-          href={`tel:${guide.phoneno}`}
+          href={`tel:${guide?.phoneno}`}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Call
