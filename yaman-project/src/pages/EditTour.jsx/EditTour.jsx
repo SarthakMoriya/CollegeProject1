@@ -2,13 +2,26 @@ import { useEffect, useState } from "react";
 import { BASE_URL, toastify } from "../../../utils";
 import { useSelector } from "react-redux";
 import Footer from "../../components/Footer";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+
+import { app } from "../../firebase";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+
 const EditTour = () => {
   const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
   const params = useParams();
   const [tour, setTour] = useState(null);
+  const [image, setImage] = useState(null);
   const [destinations, setDestinations] = useState([]);
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
+  const [showUploadedImage, setShowUploadedImage] = useState("");
   const [formData, setFormData] = useState({
     _id: "",
     title: "",
@@ -25,6 +38,7 @@ const EditTour = () => {
     guides: user._id,
     age: "",
     destinations: "",
+    imageUrl: "",
   });
   const fetchTour = async () => {
     await fetch(`${BASE_URL}/gettour/${params.id}`)
@@ -35,6 +49,9 @@ const EditTour = () => {
             setTour(data.tour);
             setFormData(data.tour);
             setDestinations(data?.tour?.destinations);
+            setShowUploadedImage(data?.tour?.imageUrl);
+            setIsImageUploaded(true);
+            console.log(data.tour);
           }
         }
       })
@@ -75,12 +92,42 @@ const EditTour = () => {
       .then((res) => {
         if (res.ok) {
           toastify("Tour updated successfully 🎊");
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
         }
       })
       .catch((err) => {
         console.log(err);
         toastify("Error updating tour 💣", true);
       });
+  };
+  const handleFileUpload = async () => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + image.name; // So no two users have same file
+    const storageRef = ref(storage, fileName); //location+filename
+    const uploadTask = uploadBytesResumable(storageRef, image); //finalStep
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
+      (err) => {
+        console.log(true);
+        setIsImageUploaded(false);
+        toastify("Error uploading image", true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+          setIsImageUploaded(true);
+          console.log(downloadUrl);
+          setFormData({ ...formData, imageUrl: downloadUrl });
+          setShowUploadedImage(downloadUrl);
+          toastify("Image uploaded successfully ");
+        });
+      }
+    );
   };
   useEffect(() => {
     fetchTour();
@@ -90,15 +137,31 @@ const EditTour = () => {
       <ToastContainer />
       <section className="bg-white dark:bg-gray-900 border-b-2 border-blue-700">
         <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-          <h2 className="mb-4 text-xl font-bold text-white mt-8">
-            Update Tour
-          </h2>
+          <h2 className="my-4 text-xl font-bold text-white ">Update Tour</h2>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+              <div className="">
+                {isImageUploaded && <img src={showUploadedImage} />}
+                <input
+                  type="file"
+                  className="p-3 rounded-lg border-none bg-transparent text-white text-lg my-4"
+                  onChange={(e) => {
+                    setImage(e.target.files[0]);
+                  }}
+                />
+
+                <button
+                  type="button"
+                  className=" w-full border-4 border-dotted border-blue-400 p-3 text-white font-semibold text-xl"
+                  onClick={handleFileUpload}
+                >
+                  Upload
+                </button>
+              </div>
               <div className="sm:col-span-2">
                 <label
                   htmlFor="name"
-                  className="block mb-2 text-sm font-medium  text-white"
+                  className="block mb-2 text-sm font-medium text-white "
                 >
                   Tour Name
                 </label>
@@ -109,7 +172,7 @@ const EditTour = () => {
                   defaultValue={tour?.title}
                   value={formData.title}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Type tour name"
                   required="true"
                 />
@@ -117,7 +180,7 @@ const EditTour = () => {
               <div className="w-full">
                 <label
                   htmlFor="location"
-                  className="block mb-2 text-sm font-medium  text-white"
+                  className="block mb-2 text-sm font-medium text-white "
                 >
                   Location
                 </label>
@@ -128,7 +191,7 @@ const EditTour = () => {
                   value={formData.location}
                   defaultValue={tour?.location}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="location"
                   required="true"
                 />
@@ -147,22 +210,22 @@ const EditTour = () => {
                   defaultValue={tour?.price}
                   value={formData.price}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="$2999"
-                  required="true"
+                  required
                 />
               </div>
               <div>
                 <label
                   htmlFor="category"
-                  className="block mb-2 text-sm font-medium text-white text-white"
+                  className="block mb-2 text-sm font-medium text-white "
                 >
                   Age
                 </label>
                 <select
                   id="age"
                   name="age"
-                  className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   value={formData.age}
                   onChange={handleChange}
                 >
@@ -176,14 +239,14 @@ const EditTour = () => {
               <div>
                 <label
                   htmlFor="difficulty"
-                  className="block mb-2 text-sm font-medium  text-white"
+                  className="block mb-2 text-sm font-medium text-white "
                 >
                   Difficulty
                 </label>
                 <select
                   id="difficulty"
                   name="difficulty"
-                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   value={formData.difficulty}
                   onChange={handleChange}
                 >
@@ -207,7 +270,7 @@ const EditTour = () => {
                   id="duration"
                   value={formData.duration}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="12"
                   required=""
                 />
@@ -215,7 +278,7 @@ const EditTour = () => {
               <div>
                 <label
                   htmlFor="groupsize"
-                  className="block mb-2 text-sm font-medium text-white"
+                  className="block mb-2 text-sm font-medium text-white "
                 >
                   Group Size
                 </label>
@@ -225,7 +288,7 @@ const EditTour = () => {
                   id="groupsize"
                   value={formData.maxGroupSize}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="12"
                   required="true"
                 />
@@ -241,9 +304,9 @@ const EditTour = () => {
                   type="date"
                   name="startDate"
                   id="item-weight"
-                  value={formData.startDate}
+                  defaultValue={formData.startDate.slice(0, 10)}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="12"
                   required=""
                 />
@@ -251,7 +314,7 @@ const EditTour = () => {
               <div>
                 <label
                   htmlFor="endDate"
-                  className="block mb-2 text-sm font-medium text-white"
+                  className="block mb-2 text-sm font-medium text-white "
                 >
                   End date
                 </label>
@@ -259,9 +322,9 @@ const EditTour = () => {
                   type="date"
                   name="endDate"
                   id="endDate"
-                  value={formData.endDate}
+                  defaultValue={formData.endDate.slice(0, 10)}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="12"
                   required=""
                 />
@@ -270,7 +333,7 @@ const EditTour = () => {
               <div className="sm:col-span-2">
                 <label
                   htmlFor="description"
-                  className="block mb-2 text-sm font-medium text-white"
+                  className="block mb-2 text-sm font-medium text-white "
                 >
                   Description
                 </label>
@@ -280,7 +343,7 @@ const EditTour = () => {
                   name="desc"
                   value={formData.desc}
                   onChange={handleChange}
-                  className="block p-2.5 w-full text-sm bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="block p-2.5 w-full text-sm text-white bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Your description here"
                 ></textarea>
               </div>
@@ -294,7 +357,7 @@ const EditTour = () => {
                     <div>
                       <label
                         htmlFor="descttitle"
-                        className="block mb-2 text-sm font-medium text-white"
+                        className="block mb-2 text-sm font-medium text-white "
                       >
                         Destination Title {i + 1}
                       </label>
@@ -306,7 +369,7 @@ const EditTour = () => {
                         onChange={(e) => {
                           handleDestinationForm(e, i);
                         }}
-                        className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         placeholder="12"
                         required=""
                       />
@@ -314,7 +377,7 @@ const EditTour = () => {
                     <div>
                       <label
                         htmlFor="descdate"
-                        className="block mb-2 text-sm font-medium text-white"
+                        className="block mb-2 text-sm font-medium text-white "
                       >
                         Destination Date
                       </label>
@@ -326,7 +389,7 @@ const EditTour = () => {
                         onChange={(e) => {
                           handleDestinationForm(e, i);
                         }}
-                        className="bg-gray-50 border border-gray-300  text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         placeholder="12"
                         required=""
                       />
@@ -334,7 +397,7 @@ const EditTour = () => {
                     <div>
                       <label
                         htmlFor="desctdesc"
-                        className="block mb-2 text-sm font-medium text-white text-white"
+                        className="block mb-2 text-sm font-medium text-white "
                       >
                         Destination Description
                       </label>
@@ -346,7 +409,7 @@ const EditTour = () => {
                         onChange={(e) => {
                           handleDestinationForm(e, i);
                         }}
-                        className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        className="bg-gray-50 border border-gray-300 text-white text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         placeholder="12"
                         required=""
                       />

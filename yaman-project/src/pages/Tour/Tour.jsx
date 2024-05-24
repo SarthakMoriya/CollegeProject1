@@ -4,6 +4,7 @@ import { BASE_URL, formatDate } from "../../../utils";
 import { useState } from "react";
 import { useEffect } from "react";
 import HeadingWrapper from "../../components/HeadingWrapper";
+import {motion} from 'framer-motion'
 
 import TitleIcon from "../../icons/TitleIcon";
 import CalendarIcon from "../../icons/CalendarIcon";
@@ -109,7 +110,9 @@ const Tour = () => {
         <HeadingWrapper heading={"Destinations Covered"} />
         <div className=" flex gap-4 flex-wrap justify-center">
           {tour?.destinations.map((dest, i) => (
-            <div
+            <motion.div
+            whileInView={{ opacity: [0, 1] }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
               key={i}
               className="text-black max-w-[401px] w-[401px] shadow-lg border h-[500px]"
             >
@@ -133,7 +136,7 @@ const Tour = () => {
               p-3 capitalize text-lg font-semibold  h-full">
                 {dest.desctdesc}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

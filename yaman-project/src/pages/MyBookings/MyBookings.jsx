@@ -12,20 +12,17 @@ import StatusIcon from "../../icons/StatusIcon";
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
   const user = useSelector((state) => state.auth.user);
-  const [status, setStatus] = useState("");
-  console.log(user);
   const fetchUserBooking = async () => {
     await fetch(`${BASE_URL}/plannerbookings/${user._id}`).then(async (res) => {
       if (res.ok) {
         let data = await res.json();
         console.log(data);
         setBookings(data);
-        setStatus(data[0].status);
       }
     });
   };
   const handleStatus = async (booking) => {
-    const res = await fetch(`${BASE_URL}/bookings`, {
+    await fetch(`${BASE_URL}/bookings`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -34,9 +31,8 @@ const MyBookings = () => {
         id: booking._id,
       }),
     });
-    if (res.ok) {
-      window.location.reload();
-    }
+
+    window.location.reload();
   };
   useEffect(() => {
     fetchUserBooking();
@@ -76,19 +72,16 @@ const MyBookings = () => {
                   </div>
                   <div className="flex items-center justify-center gap-2">
                     <StatusIcon />
-                    <div className="">
-                      <div className="">
-                        <div className="capitalize">Current Status: {booking.status}</div>
-                        <button
-                          className="border p-2 bg-blue-400 rounded-lg"
-                          onClick={() => {
-                            handleStatus(booking);
-                          }}
-                        >
-                          Update Status
-                        </button>
-                      </div>
-                    </div>
+                    <div className="capitalize">{booking?.status}</div>
+
+                    <button
+                      className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      onClick={() => {
+                        handleStatus(booking);
+                      }}
+                    >
+                      Update Status
+                    </button>
                   </div>
                 </div>
               );

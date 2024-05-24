@@ -11,10 +11,13 @@ import Location from "../../icons/Location";
 import { useNavigate } from "react-router-dom";
 import TitleIcon from "../../icons/TitleIcon";
 
+import { motion } from "framer-motion";
+
 const MyTours = () => {
   const [tours, setTours] = useState([]);
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
+
   const fetchMyTours = async () => {
     await fetch(`${BASE_URL}/mytours/${user._id}`).then(async (res) => {
       if (res.ok) {
@@ -24,7 +27,6 @@ const MyTours = () => {
       }
     });
   };
-
   const deleteTour = async (tour) => {
     await fetch(`${BASE_URL}/deletetour/${tour._id}`, {
       method: "DELETE",
@@ -44,81 +46,115 @@ const MyTours = () => {
   }, []);
   return (
     <>
-      <div className="border-b-4 border-blue-500 ">
+      <div className="border-b-4 border-blue-500 bg-slate-100">
         <br />
         <br />
         <br />
         <br />
         <HeadingWrapper heading={"YOUR TOURS"} />
-        <div className="flex flex-wrap justify-center gap-4 m-6 ">
+        <div className="flex flex-wrap justify-center gap-8 m-6 ">
           {tours.length &&
             tours.map((tour) => (
-              <div
+              <motion.div
+                whileInView={{ opacity: [0, 1] }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
                 key={tour?._id}
-                className="border-2 bg-slate-200 shadow-sm mx-2 max-w-[400px] "
+                className="border-2 bg-slate-200 rounded-lg mx-2 max-w-[500px] w-[400px] shadow-xl"
               >
-                <div className="max-w-[397px] max-h-[300px] overflow-hidden">
+                <motion.div
+                  whileInView={{ opacity: [0, 1] }}
+                  transition={{ duration: 1.5, ease: "easeInOut" }}
+                  className="max-w-[397px] max-h-[300px] h-[397px] overflow-hidden"
+                >
                   <img
                     src={tour?.imageUrl}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-lg"
                   />
-                </div>
+                </motion.div>
                 <div className=" flex flex-col">
-                  <div className="flex items-center justify-center gap-4 text-black mt-4 mb-2">
+                  <motion.div
+                    whileInView={{ opacity: [0, 1]}}
+                    transition={{ duration: 1.5, ease: "easeInOut" }}
+                    className="flex items-center justify-center gap-4 text-black mt-4 mb-2"
+                  >
                     <TitleIcon />
                     <div className="capitalize">{tour?.title}</div>
-                  </div>
-                  <div className="flex items-center justify-center gap-4 text-black mt-4 mb-2">
+                  </motion.div>
+                  <motion.div
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 1.5, ease: "easeInOut" }}
+                    className="flex items-center justify-center gap-4 text-black mt-4 mb-2"
+                  >
                     <Location />
                     <div className="capitalize">{tour?.location}</div>
-                  </div>
-                  <div className="flex items-center justify-center gap-4 text-black my-2">
+                  </motion.div>
+                  <motion.div
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 1.5, ease: "easeInOut" }}
+                    className="flex items-center justify-center gap-4 text-black my-2"
+                  >
                     <PriceIcon />
                     <div className="capitalize">{tour?.price}</div>
-                  </div>
-                  <div className="flex items-center justify-center gap-4 text-black my-2">
+                  </motion.div>
+                  <motion.div
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 1.5, ease: "easeInOut" }}
+                    className="flex items-center justify-center gap-4 text-black my-2"
+                  >
                     <GroupSize />
                     <div className="capitalize">{tour?.maxGroupSize}</div>
-                  </div>
-                  <div className="flex items-center justify-center gap-4 text-black my-2">
+                  </motion.div>
+                  <motion.div
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 1.5, ease: "easeInOut" }}
+                    className="flex items-center justify-center gap-4 text-black my-2"
+                  >
                     <RatingsIcon />
                     <div className="capitalize">
                       <div className="">{tour?.ratingAverage}</div>
                     </div>
-                  </div>
-                  <div className="flex items-center justify-center gap-4 text-black my-2">
+                  </motion.div>
+                  <motion.div
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 1.5, ease: "easeInOut" }}
+                    className="flex items-center justify-center gap-4 text-black my-2"
+                  >
                     <CalendarIcon />
                     <div className="capitalize">
                       {tour?.startDate.slice(0, 10)}
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
                 <div className="flex items-center justify-center gap-8">
-                  <button
+                  <motion.button
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 1.5, ease: "easeInOut" }}
                     data-modal-target="crud-modal"
                     data-modal-toggle="crud-modal"
-                    className=" text-black bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 flex items-center justify-center my-2"
+                    className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 flex items-center justify-center my-2"
                     type="button"
                     onClick={() => {
                       editTour(tour);
                     }}
                   >
                     Edit
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 1.5, ease: "easeInOut" }}
                     data-modal-target="crud-modal"
                     data-modal-toggle="crud-modal"
-                    className=" text-black bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 flex items-center justify-center my-2"
+                    className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 flex items-center justify-center my-2"
                     type="button"
                     onClick={() => {
                       deleteTour(tour);
                     }}
                   >
                     Delete
-                  </button>
+                  </motion.button>
                 </div>
-              </div>
+              </motion.div>
             ))}
         </div>
       </div>

@@ -11,10 +11,26 @@ export async function signup(req, res) {
       return res.status(500).json({ message: "Email already in use" });
     const hashedPassword = await bcrypt.hash(data.password, 10);
     // CREATING USER
-    let newUser = await usermodel.create({ ...data, password: hashedPassword });
-    //Creating token
-    const token = jwt.sign(data.email, "heheheheheheeh");
-    res.status(200).json({ user: newUser, token });
+    if (req.body.role == "user") {
+      let newUser = await usermodel.create({
+        ...data,
+        password: hashedPassword,
+        isAdminApproved: true,
+      });
+
+      //Creating token
+      const token = jwt.sign(data.email, "heheheheheheeh");
+      return res.status(200).json({ user: newUser, token });
+    } else {
+      let newUser = await usermodel.create({
+        ...data,
+        password: hashedPassword,
+      });
+
+      //Creating token
+      const token = jwt.sign(data.email, "heheheheheheeh");
+      return res.status(200).json({ user: newUser, token });
+    }
   } catch (error) {
     // Unexpected Errors are caught here
     res.status(500).json({ message: "Error!", error });
@@ -43,7 +59,7 @@ export async function login(req, res) {
     // CHECK IF USER EXISTS ITH THE EMAI PROVIDED
     let existingUser = await usermodel.find({ email: credentails.email });
     if (!existingUser) return res.status(401).send("INVALID EMAIL");
-    console.log(existingUser)
+    console.log(existingUser);
     // IF THE USER EXISTIS WITH EMAIL PROVIDED MATCH THE PASSWORD
     let correctPassword = await bcrypt.compare(
       credentails.password,
@@ -53,13 +69,12 @@ export async function login(req, res) {
 
     // IF PASSWORD IS ALSO CORRECT GENERATE TOKEN
     let token = jwt.sign(credentails.email, "heheheheheheeh");
-    console.log(existingUser)
+    console.log(existingUser);
     res.status(200).json({ token, user: existingUser[0] });
   } catch (error) {
     res.status(500).json({ message: "ERROR", error });
   }
 }
-
 
 // ADMIN LOGIN
 export const adminLogin = async (req, res) => {
@@ -123,10 +138,9 @@ export const deleteUnapprovedAccounts = async (req, res) => {
   }
 };
 
-
 export const getAllAccounts = async (req, res) => {
-  let accounts1 = await usermodel.find({role:"user"});
-  let accounts2 = await usermodel.find({role:"planner"});
-  accounts1=[...accounts1,...accounts2];
+  let accounts1 = await usermodel.find({ role: "user" });
+  let accounts2 = await usermodel.find({ role: "planner" });
+  accounts1 = [...accounts1, ...accounts2];
   res.send(accounts1);
 };

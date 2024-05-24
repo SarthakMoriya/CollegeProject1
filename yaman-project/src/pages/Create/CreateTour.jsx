@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 const CreateTour = () => {
+  const today = new Date().toISOString().split('T')[0];
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
   const [destination, setDestination] = useState({
@@ -24,7 +25,7 @@ const CreateTour = () => {
   });
   const [image, setImage] = useState(null);
   const [showUploadedImage, setShowUploadedImage] = useState("");
-  const [isAdding, setIsAdding] = useState(false)
+  const [duration, setDuration] = useState(0);
   const [addDest, setAddDest] = useState(false);
   const [isImageUploaded, setIsImageUploaded] = useState(false);
   const [formData, setFormData] = useState({
@@ -46,10 +47,15 @@ const CreateTour = () => {
   });
   const handleChange = (event) => {
     const { name, value } = event.target;
+    console.log(name,value)
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
+
+    if(name==='endDate'){
+      setDuration(calculateDuration(formData.startDate,formData.endDate))
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -157,12 +163,21 @@ const CreateTour = () => {
     });
     console.log(formData);
   };
+
+  const calculateDuration = (start, end) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const timeDiff = endDate - startDate;
+    const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+    console.log(daysDiff)
+    return daysDiff;
+};
   return (
     <>
       <ToastContainer />
       <section className="bg-white dark:bg-gray-900 border-b-2 border-blue-700">
         <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-          <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-black">
+          <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
             Add a new tour
           </h2>
           <form onSubmit={handleSubmit}>
@@ -171,20 +186,20 @@ const CreateTour = () => {
                 {isImageUploaded && <img src={showUploadedImage} />}
                 <input
                   type="file"
-                  className="p-3 rounded-lg border-none bg-transparent text-black text-lg my-4"
+                  className="p-3 rounded-lg border-none bg-transparent text-white text-lg my-4"
                   onChange={(e) => {
                     setImage(e.target.files[0]);
                   }}
                 />
 
                 {isImageUploaded ? (
-                  <div className="cursor-not-allowed w-full border-4 border-dotted border-blue-400 p-3 text-black font-semibold text-xl">
+                  <div className="cursor-not-allowed w-full border-4 border-dotted border-blue-400 p-3 text-white font-semibold text-xl">
                     Image Uploaded
                   </div>
                 ) : (
                   <button
                     type="button"
-                    className=" w-full border-4 border-dotted border-blue-400 p-3 text-black font-semibold text-xl"
+                    className=" w-full border-4 border-dotted border-blue-400 p-3 text-white font-semibold text-xl"
                     onClick={handleFileUpload}
                   >
                     Upload
@@ -194,7 +209,7 @@ const CreateTour = () => {
               <div className="sm:col-span-2">
                 <label
                   htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Tour Name
                 </label>
@@ -204,7 +219,7 @@ const CreateTour = () => {
                   id="name"
                   value={formData.title}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Type tour name"
                   required="true"
                 />
@@ -212,7 +227,7 @@ const CreateTour = () => {
               <div className="w-full">
                 <label
                   htmlFor="location"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Location
                 </label>
@@ -223,7 +238,7 @@ const CreateTour = () => {
                   id="location"
                   value={formData.location}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="location"
                   required="true"
                 />
@@ -231,7 +246,7 @@ const CreateTour = () => {
               <div className="w-full">
                 <label
                   htmlFor="price"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Price
                 </label>
@@ -241,7 +256,7 @@ const CreateTour = () => {
                   id="price"
                   value={formData.price}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="$2999"
                   required="true"
                 />
@@ -249,14 +264,14 @@ const CreateTour = () => {
               <div>
                 <label
                   htmlFor="category"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Age
                 </label>
                 <select
                   id="age"
                   name="age"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   value={formData.age}
                   onChange={handleChange}
                 >
@@ -270,14 +285,14 @@ const CreateTour = () => {
               <div>
                 <label
                   htmlFor="difficulty"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Difficulty
                 </label>
                 <select
                   id="difficulty"
                   name="difficulty"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   value={formData.difficulty}
                   onChange={handleChange}
                 >
@@ -291,7 +306,7 @@ const CreateTour = () => {
               <div>
                 <label
                   htmlFor="duration"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Duration
                 </label>
@@ -299,17 +314,19 @@ const CreateTour = () => {
                   type="number"
                   name="duration"
                   id="duration"
+                  max={duration?duration:2}
+                  disabled={formData.startDate === "" || formData.endDate === ""}
                   value={formData.duration}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="12"
-                  required=""
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Select start and end dates"
+                  required
                 />
               </div>
               <div>
                 <label
                   htmlFor="groupsize"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Group Size
                 </label>
@@ -319,7 +336,7 @@ const CreateTour = () => {
                   id="groupsize"
                   value={formData.maxGroupSize}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="12"
                   required="true"
                 />
@@ -327,7 +344,7 @@ const CreateTour = () => {
               <div>
                 <label
                   htmlFor="startDate"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Start date
                 </label>
@@ -336,8 +353,9 @@ const CreateTour = () => {
                   name="startDate"
                   id="item-weight"
                   value={formData.startDate}
+                  min={today}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="12"
                   required=""
                 />
@@ -345,7 +363,7 @@ const CreateTour = () => {
               <div>
                 <label
                   htmlFor="endDate"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   End date
                 </label>
@@ -353,9 +371,10 @@ const CreateTour = () => {
                   type="date"
                   name="endDate"
                   id="endDate"
+                  min={formData.startDate}
                   value={formData.endDate}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="12"
                   required=""
                 />
@@ -363,7 +382,7 @@ const CreateTour = () => {
               <div className="sm:col-span-2">
                 <label
                   htmlFor="description"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Description
                 </label>
@@ -373,7 +392,7 @@ const CreateTour = () => {
                   name="desc"
                   value={formData.desc}
                   onChange={handleChange}
-                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Your description here"
                 ></textarea>
               </div>
@@ -384,7 +403,7 @@ const CreateTour = () => {
                   <div>
                     <label
                       htmlFor="destimg"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Destination Image
                     </label>
@@ -395,12 +414,12 @@ const CreateTour = () => {
                       onChange={(e) => {
                         handleDestinationForm(e);
                       }}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="12"
                       required=""
                     />
                     <div
-                      className="inline-flex items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-black bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-black hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out"
+                      className="inline-flex items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-white hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out"
                       onClick={() => {
                         handleDestinationImage();
                       }}
@@ -411,7 +430,7 @@ const CreateTour = () => {
                   <div>
                     <label
                       htmlFor="descttitle"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Destination Title
                     </label>
@@ -423,15 +442,15 @@ const CreateTour = () => {
                       onChange={(e) => {
                         handleDestinationForm(e);
                       }}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="12"
-                      required=""
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      placeholder="Desctination Title"
+                      required
                     />
                   </div>
                   <div>
                     <label
                       htmlFor="descdate"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Destination Date
                     </label>
@@ -439,19 +458,20 @@ const CreateTour = () => {
                       type="date"
                       name="desctdate"
                       id="desctdate"
+                      min={formData.startDate}
+                      max={formData.endDate}
                       value={destination.desctdate}
                       onChange={(e) => {
                         handleDestinationForm(e);
                       }}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="12"
-                      required=""
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      required
                     />
                   </div>
                   <div>
                     <label
                       htmlFor="desctdesc"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-black"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Destination Description
                     </label>
@@ -463,13 +483,13 @@ const CreateTour = () => {
                       onChange={(e) => {
                         handleDestinationForm(e);
                       }}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="12"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      placeholder="Destination Description...."
                       required=""
                     />
                   </div>
                   <div
-                    className="inline-flex items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-black bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-black hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out"
+                    className="inline-flex items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-white hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out"
                     onClick={handleDestination}
                   >
                     Save
@@ -480,15 +500,15 @@ const CreateTour = () => {
             <button
               type="button"
               onClick={() => setAddDest(!addDest)}
-              className="inline-flex items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-black bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-black hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out"
+              className="inline-flex items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-white hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out"
             >
-              {addDest?"Save Destinations":"Add Destinations"}
+              {addDest ? "Save Destinations" : "Add Destinations"}
             </button>
             <br />
             <div className="">
               <button
                 type="submit"
-                className=" items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-black bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-black hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out w-full"
+                className=" items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-white hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out w-full"
               >
                 Add Tour
               </button>

@@ -13,9 +13,9 @@ import "./BookingCard.css";
 const BookingCard = ({ tour }) => {
   const navigate = useNavigate();
   return (
-    <motion.div key={tour?._id} className=" bg-slate-200 border-2 max-w-[400px] max-h-[550px] min-h-[550px] shadow-sm mx-2">
+    <motion.div key={tour?._id} className=" bg-slate-200 border-2 max-w-[400px] max-h-[550px] min-h-[550px] shadow-xl mx-2 rounded-lg">
       <div className="max-w-[397px] max-h-[265px] overflow-hidden">
-        <img src={tour?.imageUrl} alt="" className="w-full h-full object-cover" />
+        <img src={tour?.imageUrl} alt="" className="w-full h-full rounded-lg object-cover" />
       </div>
       <div className=" ">
         <div className="">

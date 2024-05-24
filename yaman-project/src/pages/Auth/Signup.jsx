@@ -28,7 +28,6 @@ const Signup = () => {
         headers: { "Content-Type": "application/json" },
       })
         .then(async (res) => {
-          console.log(res.ok);
           let data = await res.json();
           if (res.ok) {
             toastify("Signup successful");

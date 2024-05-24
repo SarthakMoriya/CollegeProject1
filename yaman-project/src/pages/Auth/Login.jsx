@@ -42,7 +42,7 @@ const Login = () => {
             if (data.user.role == "user") {
               navigate("/");
             } else if (data.user.role == "planner") navigate("/mytours");
-          }, 4000);
+          }, 2400);
         }
 
         setloading(false);
@@ -89,7 +89,7 @@ const Login = () => {
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="email"
               >
-                Username*
+                Email*
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -99,7 +99,8 @@ const Login = () => {
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
-                placeholder="Username"
+                required
+                placeholder="Email Address"
               />
             </div>
             <div className="mb-6">
@@ -118,6 +119,7 @@ const Login = () => {
                   setPassword(e.target.value);
                 }}
                 placeholder="******************"
+                required
               />
             </div>
             <div className="flex items-center justify-between">
