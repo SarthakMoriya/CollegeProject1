@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { BASE_URL, formatDate, toastify } from "../../../utils";
 import { useSelector } from "react-redux";
 import Footer from "../../components/Footer";
@@ -14,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 const CreateTour = () => {
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
   const [destination, setDestination] = useState({
@@ -47,14 +48,14 @@ const CreateTour = () => {
   });
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log(name,value)
+    console.log(name, value);
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
 
-    if(name==='endDate'){
-      setDuration(calculateDuration(formData.startDate,formData.endDate))
+    if (name === "endDate") {
+      setDuration(calculateDuration(formData.startDate, formData.endDate));
     }
   };
 
@@ -169,15 +170,15 @@ const CreateTour = () => {
     const endDate = new Date(end);
     const timeDiff = endDate - startDate;
     const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
-    console.log(daysDiff)
+    console.log(daysDiff);
     return daysDiff;
-};
+  };
   return (
     <>
       <ToastContainer />
       <section className="bg-white dark:bg-gray-900 border-b-2 border-blue-700">
         <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-          <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+          <h2 className="my-4 text-xl font-bold text-gray-900 dark:text-white">
             Add a new tour
           </h2>
           <form onSubmit={handleSubmit}>
@@ -206,7 +207,11 @@ const CreateTour = () => {
                   </button>
                 )}
               </div>
-              <div className="sm:col-span-2">
+              <motion.div
+                whileInView={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="sm:col-span-2"
+              >
                 <label
                   htmlFor="name"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -223,8 +228,12 @@ const CreateTour = () => {
                   placeholder="Type tour name"
                   required="true"
                 />
-              </div>
-              <div className="w-full">
+              </motion.div>
+              <motion.div
+                whileInView={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="w-full"
+              >
                 <label
                   htmlFor="location"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -242,8 +251,12 @@ const CreateTour = () => {
                   placeholder="location"
                   required="true"
                 />
-              </div>
-              <div className="w-full">
+              </motion.div>
+              <motion.div
+                whileInView={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="w-full"
+              >
                 <label
                   htmlFor="price"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -260,8 +273,11 @@ const CreateTour = () => {
                   placeholder="$2999"
                   required="true"
                 />
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                whileInView={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              >
                 <label
                   htmlFor="category"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -281,8 +297,11 @@ const CreateTour = () => {
                   <option value="25-30">25-30</option>
                   <option value="all">All</option>
                 </select>
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                whileInView={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              >
                 <label
                   htmlFor="difficulty"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -302,8 +321,11 @@ const CreateTour = () => {
                   <option value="medium">Medium</option>
                   <option value="hard">Hard</option>
                 </select>
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                whileInView={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              >
                 <label
                   htmlFor="duration"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -314,16 +336,21 @@ const CreateTour = () => {
                   type="number"
                   name="duration"
                   id="duration"
-                  max={duration?duration:2}
-                  disabled={formData.startDate === "" || formData.endDate === ""}
+                  max={duration ? duration : 2}
+                  disabled={
+                    formData.startDate === "" || formData.endDate === ""
+                  }
                   value={formData.duration}
                   onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Select start and end dates"
                   required
                 />
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                whileInView={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              >
                 <label
                   htmlFor="groupsize"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -340,8 +367,11 @@ const CreateTour = () => {
                   placeholder="12"
                   required="true"
                 />
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                whileInView={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              >
                 <label
                   htmlFor="startDate"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -359,8 +389,11 @@ const CreateTour = () => {
                   placeholder="12"
                   required=""
                 />
-              </div>
-              <div>
+              </motion.div>
+              <motion.div
+                whileInView={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              >
                 <label
                   htmlFor="endDate"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -378,8 +411,12 @@ const CreateTour = () => {
                   placeholder="12"
                   required=""
                 />
-              </div>
-              <div className="sm:col-span-2">
+              </motion.div>
+              <motion.div
+                whileInView={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="sm:col-span-2"
+              >
                 <label
                   htmlFor="description"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -395,12 +432,15 @@ const CreateTour = () => {
                   className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Your description here"
                 ></textarea>
-              </div>
+              </motion.div>
 
               {/* DESTINATION FORM */}
               {addDest && (
                 <div className="">
-                  <div>
+                  <motion.div
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                  >
                     <label
                       htmlFor="destimg"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -426,8 +466,11 @@ const CreateTour = () => {
                     >
                       Add Image
                     </div>
-                  </div>
-                  <div>
+                  </motion.div>
+                  <motion.div
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                  >
                     <label
                       htmlFor="descttitle"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -446,8 +489,11 @@ const CreateTour = () => {
                       placeholder="Desctination Title"
                       required
                     />
-                  </div>
-                  <div>
+                  </motion.div>
+                  <motion.div
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                  >
                     <label
                       htmlFor="descdate"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -467,8 +513,11 @@ const CreateTour = () => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       required
                     />
-                  </div>
-                  <div>
+                  </motion.div>
+                  <motion.div
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                  >
                     <label
                       htmlFor="desctdesc"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -487,32 +536,40 @@ const CreateTour = () => {
                       placeholder="Destination Description...."
                       required=""
                     />
-                  </div>
-                  <div
+                  </motion.div>
+                  <motion.div
+                    whileInView={{ opacity: [0, 1] }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
                     className="inline-flex items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-white hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out"
                     onClick={handleDestination}
                   >
                     Save
-                  </div>
+                  </motion.div>
                 </div>
               )}
             </div>
-            <button
+            <motion.button
+              whileInView={{ opacity: [0, 1] }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
               type="button"
               onClick={() => setAddDest(!addDest)}
               className="inline-flex items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-white hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out"
             >
               {addDest ? "Save Destinations" : "Add Destinations"}
-            </button>
+            </motion.button>
             <br />
-            <div className="">
+            <motion.div
+              className=""
+              whileInView={{ opacity: [0, 1] }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
               <button
                 type="submit"
                 className=" items-center px-5 py-2.5 my-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 border hover:bg-primary-800 cursor-pointer hover:bg-blue-400 hover:text-white hover:rounded-none hover:border-black duration-500 delay-100 ease-in-out w-full"
               >
                 Add Tour
               </button>
-            </div>
+            </motion.div>
           </form>
         </div>
       </section>

@@ -4,7 +4,7 @@ import { BASE_URL, formatDate } from "../../../utils";
 import { useState } from "react";
 import { useEffect } from "react";
 import HeadingWrapper from "../../components/HeadingWrapper";
-import {motion} from 'framer-motion'
+import { motion } from "framer-motion";
 
 import TitleIcon from "../../icons/TitleIcon";
 import CalendarIcon from "../../icons/CalendarIcon";
@@ -18,7 +18,6 @@ import BookingModal from "../../components/BookingModal";
 import DescriptionIcon from "../../icons/DescriptionIcon";
 import Footer from "../../components/Footer";
 import TourGuideCard from "../../components/TourGuideCard";
-
 
 const Tour = () => {
   const params = useParams();
@@ -51,9 +50,9 @@ const Tour = () => {
       <br />
       <br />
       <div className="flex gap-4  justify-center min-h-screen min-w-screen border border-white p-12">
-        <div className="flex  flex-col w-1/2 min-h-1/2 rounded-lg shadow-xl border">
-          <div className="w-1/2 self-center shadow-xl mt-4">
-            <img src={tour?.imageUrl} alt="" className="rounded-lg shadow-lg" />
+        <div className="flex  flex-col w-1/2 min-h-1/2  border">
+          <div className="w-1/2 self-center mt-4">
+            <img src={tour?.imageUrl} alt="" className="rounded-lg " />
           </div>
 
           <div className="flex flex-col  rounded-lg  my-6 p-4 capitalize">
@@ -111,30 +110,39 @@ const Tour = () => {
         <div className=" flex gap-4 flex-wrap justify-center">
           {tour?.destinations.map((dest, i) => (
             <motion.div
-            whileInView={{ opacity: [0, 1] }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
+              whileInView={{ opacity: [0, 1] }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
               key={i}
-              className="text-black max-w-[401px] w-[401px] shadow-lg border h-[500px]"
+              className="flip-card text-black max-w-[401px] w-[401px] shadow-lg border h-[500px] perspective"
             >
-              <img
-                src={
-                  dest.destimg == ""
-                    ? "https://firebasestorage.googleapis.com/v0/b/yamanproject-4e8ba.appspot.com/o/1715253469516goa.jpg?alt=media&token=791f22aa-e186-4823-9ff8-4bf4df94f511"
-                    : dest.destimg
-                }
-                alt=""
-                className="max-w-[400px] max-h-[300px] h-full"
-              />
-              <div className="p-3 capitalize text-lg font-semibold ">
-                {i + 1}){dest.descttitle}
-              </div>
-              <div className="p-3 capitalize text-lg font-semibold ">
-                Date: {formatDate(dest.desctdate)}
-              </div>
-              <div className="
+              <div className="flip-card-inner">
+                <div className="flip-card-front">
+                  <img
+                    src={
+                      dest.destimg === ""
+                        ? "https://firebasestorage.googleapis.com/v0/b/yamanproject-4e8ba.appspot.com/o/1715253469516goa.jpg?alt=media&token=791f22aa-e186-4823-9ff8-4bf4df94f511"
+                        : dest.destimg
+                    }
+                    alt=""
+                    className="max-w-[400px] max-h-[300px] h-full"
+                  />
+                  <div className="p-3 capitalize text-lg font-semibold ">
+                    {i + 1}) {dest.descttitle}
+                  </div>
+                  <div className="p-3 capitalize text-lg font-semibold ">
+                    Date: {formatDate(dest.desctdate)}
+                  </div>
+                  <div
+                    className="
               truncate
-              p-3 capitalize text-lg font-semibold  h-full">
-                {dest.desctdesc}
+              p-3 capitalize text-lg font-semibold  h-full"
+                  >
+                    {dest.desctdesc}
+                  </div>
+                </div>
+                <div className="flip-card-back p-3 capitalize text-lg font-semibold h-full">
+                  {dest.desctdesc}
+                </div>
               </div>
             </motion.div>
           ))}
